@@ -1,9 +1,25 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model Enterprise {
+  id         String   @id @default(uuid())
+  name       String
+  cnpj       String   @unique
+  email      String?  
+  phone      String?  
+  created_at DateTime @default(now())
+  address    Address?
+}
+
+model Address {
+  id            String     @id @default(uuid())
+  street        String
+  enterprise_id String     @unique
+  enterprise    Enterprise @relation(fields: [enterprise_id], references: [id], onDelete: Cascade)
 }
