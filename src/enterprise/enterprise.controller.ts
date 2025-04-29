@@ -1,37 +1,13 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { PrismaService } from 'src/database/prisma.service';
+import { EnterpriseDto } from './dtos/input/enterprise.dto';
+import { EnterpriseService } from './enterprise.service';
 
 @Controller('enterprise')
 export class EnterpriseController {
-  constructor(private readonly _prismaService: PrismaService) {}
+  constructor(private readonly _enterpriseService: EnterpriseService) {}
 
   @Post()
-  async store(@Body() body: any) {
-    const {
-      name,
-      cnpj,
-      email,
-      phone,
-      address 
-    } = body;
-
-    const enterprise = await this._prismaService.enterprise.create({
-      data: {
-        name,
-        cnpj,
-        email,
-        phone,
-        address: {
-          create: {
-            street: address.street,
-          },
-        },
-      },
-      include: {
-        address: true,
-      },
-    });
-
-    return enterprise;
+  async store(@Body() body: EnterpriseDto) {
+    return this._enterpriseService.create(body);
   }
 }
