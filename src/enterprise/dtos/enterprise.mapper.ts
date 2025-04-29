@@ -18,6 +18,7 @@ export class EnterpriseMapper {
       enterpriseDto.name,
       enterpriseDto.cnpj,
       enterpriseDto.email,
+      enterpriseDto.phone,
     );
   }
 }

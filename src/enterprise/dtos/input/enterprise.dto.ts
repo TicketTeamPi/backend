@@ -1,5 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class EnterpriseDto {
   @IsString()

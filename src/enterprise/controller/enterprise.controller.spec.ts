@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EnterpriseController } from './enterprise.controller';
-import { EnterpriseService } from './enterprise.service';
-import { EnterpriseRepository } from '../database/prisma/repositories/enterprise-repository';
-import { PrismaService } from '../database/prisma/prisma.service';
+import { EnterpriseService } from '../services/enterprise.service';
+import { PrismaService } from '../../database/prisma/prisma.service';
+import { EnterpriseRepository } from '../../database/repositories/enterprise-repository';
+import { EnterpriseRepositoryMemory } from '../../database/memory/enterprise-repository-memory';
 
 describe('EnterpriseController', () => {
   let controller: EnterpriseController;
@@ -13,7 +14,10 @@ describe('EnterpriseController', () => {
       providers: [
         PrismaService,
         EnterpriseService,
-        EnterpriseRepository,
+        {
+          provide: EnterpriseRepository,
+          useClass: EnterpriseRepositoryMemory,
+        },
       ]
     }).compile();
 

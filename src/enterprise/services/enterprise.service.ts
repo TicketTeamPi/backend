@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { EnterpriseDto } from './dtos/input/enterprise.dto';
-import { EnterpriseResponse } from './dtos/output/enterprise.response';
-import { EnterpriseMapper } from './dtos/enterprise.mapper';
-import { EnterpriseRepository } from '../database/prisma/repositories/enterprise-repository';
+import { EnterpriseDto } from '../dtos/input/enterprise.dto';
+import { EnterpriseResponse } from '../dtos/output/enterprise.response';
+import { EnterpriseMapper } from '../dtos/enterprise.mapper';
+import { EnterpriseRepository } from '../../database/repositories/enterprise-repository';
 
 @Injectable()
 export class EnterpriseService {
