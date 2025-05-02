@@ -8,7 +8,6 @@ export class EnterpriseMapper {
       id: enterprise.id,
       name: enterprise.name,
       cnpj: enterprise.cnpj,
-      email: enterprise.email,
       phone: enterprise.phone,
     });
   }
@@ -17,7 +16,6 @@ export class EnterpriseMapper {
     return new Enterprise(
       enterpriseDto.name,
       enterpriseDto.cnpj,
-      enterpriseDto.email,
       enterpriseDto.phone,
     );
   }

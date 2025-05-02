@@ -33,7 +33,6 @@ describe('Services - EnterpriseService', () => {
     const enterpriseDto: EnterpriseDto = {
       name: faker.internet.username(),
       cnpj: faker.string.numeric({ length: 14 }),
-      email: faker.internet.email(),
       phone: faker.phone.number(),
     };
 
@@ -41,7 +40,6 @@ describe('Services - EnterpriseService', () => {
     console.log(result);
     expect(result).toBeDefined();
     expect(result.name).toBe(enterpriseDto.name);
-    expect(result.email).toBe(enterpriseDto.email);
     expect(result.cnpj).toBe(enterpriseDto.cnpj);
     expect(result.phone).toBe(enterpriseDto.phone);
   });
@@ -50,7 +48,6 @@ describe('Services - EnterpriseService', () => {
     const enterpriseDto: EnterpriseDto = {
       name: faker.internet.username(),
       cnpj: faker.string.numeric({ length: 14 }),
-      email: faker.internet.email(),
       phone: faker.phone.number(),
     };
 

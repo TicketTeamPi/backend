@@ -23,7 +23,6 @@ describe('EnterpriseController (e2e)', () => {
       .send({
         name: faker.company.name(),
         cnpj: faker.string.numeric({ length: 14 }),
-        email: faker.internet.email(),
         phone: faker.phone.number(),
       })
       .expect(201);
