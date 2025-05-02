@@ -32,17 +32,32 @@ describe('Services - EnterpriseService', () => {
   it('should create an enterprise and return the response', async () => {
     const enterpriseDto: EnterpriseDto = {
       name: faker.internet.username(),
-      cnpj: faker.string.numeric({length: 14}),
+      cnpj: faker.string.numeric({ length: 14 }),
       email: faker.internet.email(),
       phone: faker.phone.number(),
     };
 
     const result: EnterpriseResponse = await service.create(enterpriseDto);
-    console.log(result)
+    console.log(result);
     expect(result).toBeDefined();
     expect(result.name).toBe(enterpriseDto.name);
     expect(result.email).toBe(enterpriseDto.email);
     expect(result.cnpj).toBe(enterpriseDto.cnpj);
     expect(result.phone).toBe(enterpriseDto.phone);
+  });
+
+  it('should throw an error when the cnpj is already used', async () => {
+    const enterpriseDto: EnterpriseDto = {
+      name: faker.internet.username(),
+      cnpj: faker.string.numeric({ length: 14 }),
+      email: faker.internet.email(),
+      phone: faker.phone.number(),
+    };
+
+    await service.create(enterpriseDto);
+
+    await expect(service.create(enterpriseDto)).rejects.toThrow(
+      'já existe uma empresa com esse cnpj.',
+    );
   });
 });

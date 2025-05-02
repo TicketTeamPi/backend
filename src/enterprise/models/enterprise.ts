@@ -1,4 +1,4 @@
-import { BaseEntity } from "../../shared/base-entity";
+import { BaseEntity } from '../../shared/base-entity';
 
 export class Enterprise extends BaseEntity {
   private readonly _name: string;

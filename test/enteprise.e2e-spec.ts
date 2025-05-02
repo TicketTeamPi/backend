@@ -22,10 +22,10 @@ describe('EnterpriseController (e2e)', () => {
       .post('/enterprise')
       .send({
         name: faker.company.name(),
-        cnpj: faker.string.numeric({length: 14}),
+        cnpj: faker.string.numeric({ length: 14 }),
         email: faker.internet.email(),
         phone: faker.phone.number(),
       })
-      .expect(201)
+      .expect(201);
   });
 });

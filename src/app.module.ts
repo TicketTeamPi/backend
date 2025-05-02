@@ -13,7 +13,7 @@ import { EnterpriseRepository } from './database/repositories/enterprise-reposit
       provide: EnterpriseRepository,
       useClass: EnterpriseRepositoryPrisma,
     },
-    EnterpriseService
+    EnterpriseService,
   ],
   controllers: [EnterpriseController],
 })

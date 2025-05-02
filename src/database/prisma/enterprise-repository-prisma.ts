@@ -7,6 +7,23 @@ import { EnterpriseRepository } from '../repositories/enterprise-repository';
 export class EnterpriseRepositoryPrisma implements EnterpriseRepository {
   constructor(private readonly _prismaService: PrismaService) {}
 
+  async findByCnpj(email: string): Promise<Enterprise | undefined> {
+    const enterprise = await this._prismaService.enterprise.findFirst({
+      where: {
+        email,
+      },
+    });
+
+    return enterprise
+      ? new Enterprise(
+          enterprise.name,
+          enterprise.cnpj,
+          enterprise.email!,
+          enterprise.phone!,
+        )
+      : undefined;
+  }
+
   async create(enterprise: Enterprise): Promise<Enterprise> {
     await this._prismaService.enterprise.create({
       data: {

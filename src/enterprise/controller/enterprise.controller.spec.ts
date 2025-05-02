@@ -18,7 +18,7 @@ describe('EnterpriseController', () => {
           provide: EnterpriseRepository,
           useClass: EnterpriseRepositoryMemory,
         },
-      ]
+      ],
     }).compile();
 
     controller = module.get<EnterpriseController>(EnterpriseController);
