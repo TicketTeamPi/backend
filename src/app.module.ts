@@ -8,9 +8,10 @@ import { UserRepository } from './database/repositories/user-repository';
 import { UserRepositoryMemory } from './database/memory/user-repository-memory';
 import { UserController } from './user/controller/user.controller';
 import { UserService } from './user/services/user.service';
+import { EmailModule } from './email/email.module';
 
 @Module({
-  imports: [],
+  imports: [EmailModule],
   providers: [
     PrismaService,
     {
