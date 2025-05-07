@@ -3,9 +3,9 @@ import { EnterpriseRepository } from '../repositories/enterprise-repository';
 
 export class EnterpriseRepositoryMemory implements EnterpriseRepository {
   private readonly enterprises: Enterprise[] = [];
-  
+
   async findByCnpj(cnpj: string): Promise<Enterprise | undefined> {
-    return this.enterprises.find(e => e.cnpj === cnpj);
+    return this.enterprises.find((e) => e.cnpj === cnpj);
   }
 
   async create(enterprise: Enterprise): Promise<Enterprise> {

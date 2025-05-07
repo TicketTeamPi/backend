@@ -9,9 +9,9 @@ export class EnterpriseDto {
   @IsNotEmpty()
   @Length(14)
   cnpj: string;
-  
+
   @IsNotEmpty()
   @IsString()
-  @Length(10,11)
+  @Length(10, 11)
   phone?: string;
 }

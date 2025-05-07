@@ -4,6 +4,8 @@ import { EnterpriseController } from './enterprise/controller/enterprise.control
 import { EnterpriseRepositoryPrisma } from './database/prisma/enterprise-repository-prisma';
 import { EnterpriseService } from './enterprise/services/enterprise.service';
 import { EnterpriseRepository } from './database/repositories/enterprise-repository';
+import { UserRepository } from './database/repositories/user-repository';
+import { UserRepositoryMemory } from './database/memory/user-repository-memory';
 
 @Module({
   imports: [],
@@ -12,6 +14,10 @@ import { EnterpriseRepository } from './database/repositories/enterprise-reposit
     {
       provide: EnterpriseRepository,
       useClass: EnterpriseRepositoryPrisma,
+    },
+    {
+      provide: UserRepository,
+      useClass: UserRepositoryMemory,
     },
     EnterpriseService,
   ],

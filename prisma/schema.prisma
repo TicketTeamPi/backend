@@ -15,3 +15,16 @@ model Enterprise {
   created_at DateTime @default(now())
   updated_at DateTime? 
 }
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+model User {
+  id         String   @id @default(uuid())
+  name       String
+  role       UserRole 
+  created_at DateTime @default(now())
+  updated_at DateTime? 
+}
