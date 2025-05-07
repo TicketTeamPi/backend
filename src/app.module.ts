@@ -6,6 +6,8 @@ import { EnterpriseService } from './enterprise/services/enterprise.service';
 import { EnterpriseRepository } from './database/repositories/enterprise-repository';
 import { UserRepository } from './database/repositories/user-repository';
 import { UserRepositoryMemory } from './database/memory/user-repository-memory';
+import { UserController } from './user/controller/user.controller';
+import { UserService } from './user/services/user.service';
 
 @Module({
   imports: [],
@@ -20,7 +22,11 @@ import { UserRepositoryMemory } from './database/memory/user-repository-memory';
       useClass: UserRepositoryMemory,
     },
     EnterpriseService,
+    UserService
   ],
-  controllers: [EnterpriseController],
+  controllers: [
+    EnterpriseController,
+    UserController
+  ],
 })
 export class AppModule {}

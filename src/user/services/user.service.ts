@@ -1,15 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from '../../database/repositories/user-repository';
 import { UserDto } from '../dtos/input/user.dto';
-import { StringHelper } from 'src/helpers/string-helper';
+import { StringHelper } from '../../helpers/string-helper';
 import { User, UserRole } from '../models/user';
 import { UserMapper } from '../dtos/user.mapper';
+import { UserResponse } from '../dtos/output/user.response';
 
 @Injectable()
 export class UserService {
   constructor(private readonly _userRepository: UserRepository) {}
 
-  async create(userDto: UserDto) {
+  async create(userDto: UserDto): Promise<UserResponse> {
     const emailIsAlreadyInUse = await this._userRepository.findByEmail(
       userDto.email,
     );
@@ -23,6 +24,6 @@ export class UserService {
 
     await this._userRepository.create(user);
 
-    return;
+    return UserMapper.toUserResponse(user);
   }
 }

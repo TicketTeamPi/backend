@@ -7,7 +7,7 @@ export class UserMapper {
     return new User(userDto.name, userDto.email, password, role);
   }
 
-  static toUserReponse(user: User): UserResponse {
+  static toUserResponse(user: User): UserResponse {
     return new UserResponse(user.id, user.name, user.email, user.role);
   }
 }

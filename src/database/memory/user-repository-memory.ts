@@ -1,6 +1,8 @@
 import { User } from 'src/user/models/user';
 import { UserRepository } from '../repositories/user-repository';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class UserRepositoryMemory implements UserRepository {
   private readonly users: User[] = [];
 
