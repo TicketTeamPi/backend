@@ -8,10 +8,11 @@ datasource db {
 }
 
 model Enterprise {
-  id         String   @id @default(uuid())
+  id         String    @id @default(uuid())
   name       String
-  cnpj       String   @unique
-  phone      String?  
-  created_at DateTime @default(now())
-  updated_at DateTime? 
+  cnpj       String    @unique
+  email      String
+  phone      String?
+  created_at DateTime  @default(now())
+  updated_at DateTime?
 }

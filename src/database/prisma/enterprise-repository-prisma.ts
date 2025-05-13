@@ -18,8 +18,8 @@ export class EnterpriseRepositoryPrisma implements EnterpriseRepository {
       ? new Enterprise(
           enterprise.name,
           enterprise.cnpj,
-          enterprise.email!,
-          enterprise.phone!,
+          enterprise.email,
+          enterprise.phone,
         )
       : undefined;
   }
@@ -31,7 +31,6 @@ export class EnterpriseRepositoryPrisma implements EnterpriseRepository {
         created_at: enterprise.created_at,
         name: enterprise.name,
         cnpj: enterprise.cnpj,
-        email: enterprise.email,
         phone: enterprise.phone,
       },
     });
