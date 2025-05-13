@@ -5,10 +5,13 @@ import { StringHelper } from '../../helpers/string-helper';
 import { User, UserRole } from '../models/user';
 import { UserMapper } from '../dtos/user.mapper';
 import { UserResponse } from '../dtos/output/user.response';
+import { EmailService } from 'src/email/services/email.service';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly _userRepository: UserRepository) {}
+  constructor(
+    private readonly _userRepository: UserRepository,
+  private readonly _emailService: EmailService) {}
 
   async create(userDto: UserDto): Promise<UserResponse> {
     const emailIsAlreadyInUse = await this._userRepository.findByEmail(
@@ -24,6 +27,14 @@ export class UserService {
 
     await this._userRepository.create(user);
 
-    return UserMapper.toUserResponse(user);
+    const response = UserMapper.toUserResponse(user);
+
+    await this._emailService.sendCredentials({
+      email: response.email,
+      name: response.name,
+      password 
+    });
+
+    return response;
   }
 }

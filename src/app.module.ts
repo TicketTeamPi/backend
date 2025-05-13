@@ -9,9 +9,15 @@ import { UserRepositoryMemory } from './database/memory/user-repository-memory';
 import { UserController } from './user/controller/user.controller';
 import { UserService } from './user/services/user.service';
 import { EmailModule } from './email/email.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [EmailModule],
+  imports: [
+    EmailModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+  ],
   providers: [
     PrismaService,
     {
@@ -23,11 +29,8 @@ import { EmailModule } from './email/email.module';
       useClass: UserRepositoryMemory,
     },
     EnterpriseService,
-    UserService
+    UserService,
   ],
-  controllers: [
-    EnterpriseController,
-    UserController
-  ],
+  controllers: [EnterpriseController, UserController],
 })
 export class AppModule {}

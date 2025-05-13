@@ -7,7 +7,7 @@ export class EnterpriseDto {
 
   @IsString()
   @IsNotEmpty()
-  @Length(14)
+  @Length(14,14)
   cnpj: string;
 
   @IsNotEmpty()
