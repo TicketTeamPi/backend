@@ -4,17 +4,41 @@ import { EnterpriseController } from './enterprise/controller/enterprise.control
 import { EnterpriseRepositoryPrisma } from './database/prisma/enterprise-repository-prisma';
 import { EnterpriseService } from './enterprise/services/enterprise.service';
 import { EnterpriseRepository } from './database/repositories/enterprise-repository';
+import * as fs from "fs";
+import { JwtModule, JwtModuleOptions } from '@nestjs/jwt';
+import { UserService } from './user/services/user.service';
+import { AuthService } from './auth/services/auth.service';
+import { RefreshTokenRepository } from './database/repositories/refresh-token-repository';
+import { AuthController } from './auth/controller/auth.controller';
+import { UserRepository } from './database/repositories/user-repository';
+import { UserRepositoryPrisma } from './database/prisma/user-repository-prisma';
 
 @Module({
-  imports: [],
+  imports: [
+    JwtModule.register({
+      privateKey: fs.readFileSync("./private.key", "utf-8"),
+      publicKey: fs.readFileSync("./public.key", "utf-8"),
+      signOptions: {algorithm: "RS256"}
+    })
+  ],
   providers: [
     PrismaService,
     {
       provide: EnterpriseRepository,
       useClass: EnterpriseRepositoryPrisma,
     },
+    {
+      provide: RefreshTokenRepository,
+      useClass: EnterpriseRepositoryPrisma,
+    },
+    {
+      provide: UserRepository,
+      useClass: UserRepositoryPrisma
+    },
     EnterpriseService,
+    UserService,
+    AuthService,
   ],
-  controllers: [EnterpriseController],
+  controllers: [EnterpriseController, AuthController],
 })
-export class AppModule {}
+export class AppModule { }

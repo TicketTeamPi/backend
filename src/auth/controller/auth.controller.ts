@@ -8,7 +8,8 @@ export class AuthController {
     
     @Post("login")
     async login(@Body() body: LoginDto) {
-        return this._authService.login(body);
+        const jwt = this._authService.login(body);
+        return jwt;
     }
     
     // @Post("refresh-token")

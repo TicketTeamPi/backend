@@ -8,7 +8,7 @@ export class User {
     private readonly _enterpriseId: string;
     private readonly _refreshTokenId?: string;
 
-    constructor(id: string, name: string, email: string, password: string, enterpriseId: string, refreshToken?: string) {
+    constructor(name: string, email: string, password: string, enterpriseId: string, refreshToken?: string, id?: string) {
         this._id = id ? id : randomUUID();
         this._name = name;
         this._email = email;

@@ -31,6 +31,7 @@ export class UserRepositoryPrisma implements UserRepository {
 
         return user
             ? new User(
+                user.id,
                 user.name,
                 user.email,
                 user.password,
