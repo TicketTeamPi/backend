@@ -12,6 +12,7 @@ import { RefreshTokenRepository } from './database/repositories/refresh-token-re
 import { AuthController } from './auth/controller/auth.controller';
 import { UserRepository } from './database/repositories/user-repository';
 import { UserRepositoryPrisma } from './database/prisma/user-repository-prisma';
+import { UserController } from './user/controller/user.controller';
 
 @Module({
   imports: [
@@ -39,6 +40,6 @@ import { UserRepositoryPrisma } from './database/prisma/user-repository-prisma';
     UserService,
     AuthService,
   ],
-  controllers: [EnterpriseController, AuthController],
+  controllers: [EnterpriseController, AuthController, UserController],
 })
 export class AppModule { }

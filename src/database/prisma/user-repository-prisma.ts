@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { PrismaService } from "./prisma.service";
 import { User } from "../../user/models/user";
 import { UserRepository } from "../repositories/user-repository";
+import { UserBdDto } from "src/user/dtos/input/user.bd.dto";
 
 @Injectable()
 export class UserRepositoryPrisma implements UserRepository {
@@ -22,7 +23,7 @@ export class UserRepositoryPrisma implements UserRepository {
         return user;
     }
 
-    async findByEmail(email: string): Promise<User | undefined> {
+    async findByEmail(email: string): Promise<UserBdDto | undefined> {
         const user = await this._prismaService.user.findFirst({
             where: {
                 email,
@@ -30,7 +31,7 @@ export class UserRepositoryPrisma implements UserRepository {
         });
 
         return user
-            ? new User(
+            ? new UserBdDto(
                 user.id,
                 user.name,
                 user.email,

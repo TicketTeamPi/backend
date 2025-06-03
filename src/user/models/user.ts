@@ -9,12 +9,12 @@ export class User {
     private readonly _refreshTokenId?: string;
 
     constructor(name: string, email: string, password: string, enterpriseId: string, refreshToken?: string, id?: string) {
-        this._id = id ? id : randomUUID();
         this._name = name;
         this._email = email;
         this._password = password;
         this._enterpriseId = enterpriseId;
         this._refreshTokenId = refreshToken;
+        this._id = id ? id : randomUUID();
     }
     
 
