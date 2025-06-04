@@ -15,6 +15,7 @@ import { UserRepositoryPrisma } from './database/prisma/user-repository-prisma';
 import { UserController } from './user/controller/user.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './shared/jwt-strategy';
+import { RefreshTokenRepositoryPrisma } from './database/prisma/refreshToken-repository-prisma';
 
 @Module({
   imports: [
@@ -33,7 +34,7 @@ import { JwtStrategy } from './shared/jwt-strategy';
     },
     {
       provide: RefreshTokenRepository,
-      useClass: EnterpriseRepositoryPrisma,
+      useClass: RefreshTokenRepositoryPrisma,
     },
     {
       provide: UserRepository,

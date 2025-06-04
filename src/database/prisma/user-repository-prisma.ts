@@ -41,4 +41,38 @@ export class UserRepositoryPrisma implements UserRepository {
             )
             : undefined;
     }
+
+    async update(user: User): Promise<void> {
+        await this._prismaService.user.update({
+            where: {
+                id: user.id,
+            },
+            data: {
+                name: user.name,
+                email: user.email,
+                password: user.password,
+                enterprise_id: user.enterpriseId,
+                refresh_token_id: user.refreshToken
+            },
+        });
+    }
+
+    async findById(id: string): Promise<UserBdDto | undefined> {
+        const user = await this._prismaService.user.findUnique({
+            where: {
+                id,
+            },
+        });
+
+        return user
+            ? new UserBdDto(
+                user.id,
+                user.name,
+                user.email,
+                user.password,
+                user.enterprise_id,
+                user.refresh_token_id ? user.refresh_token_id : undefined
+            )
+            : undefined;
+    }
 }
