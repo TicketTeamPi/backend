@@ -3,7 +3,6 @@ import { LoginDto } from "../dtos/input/Login.dto";
 import { UserRepository } from "../../database/repositories/user-repository";
 import { RefreshTokenRepository } from "../../database/repositories/refresh-token-repository";
 import { JwtService, JwtSignOptions } from "@nestjs/jwt";
-import { User} from "../../user/models/user";
 import { UserBdDto } from "src/user/dtos/input/user.bd.dto";
 
 @Injectable()
@@ -26,7 +25,7 @@ export class AuthService {
             throw new Error("Senha incorreta.");
         }
 
-        return this.generateToken(user);
+        return await this.generateToken(user);
     }
 
     async generateToken(user: UserBdDto): Promise<string> {

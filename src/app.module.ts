@@ -5,7 +5,7 @@ import { EnterpriseRepositoryPrisma } from './database/prisma/enterprise-reposit
 import { EnterpriseService } from './enterprise/services/enterprise.service';
 import { EnterpriseRepository } from './database/repositories/enterprise-repository';
 import * as fs from "fs";
-import { JwtModule, JwtModuleOptions } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import { UserService } from './user/services/user.service';
 import { AuthService } from './auth/services/auth.service';
 import { RefreshTokenRepository } from './database/repositories/refresh-token-repository';
@@ -13,6 +13,8 @@ import { AuthController } from './auth/controller/auth.controller';
 import { UserRepository } from './database/repositories/user-repository';
 import { UserRepositoryPrisma } from './database/prisma/user-repository-prisma';
 import { UserController } from './user/controller/user.controller';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './shared/jwt-strategy';
 
 @Module({
   imports: [
@@ -20,7 +22,8 @@ import { UserController } from './user/controller/user.controller';
       privateKey: fs.readFileSync("./private.key", "utf-8"),
       publicKey: fs.readFileSync("./public.key", "utf-8"),
       signOptions: {algorithm: "RS256"}
-    })
+    }),
+    PassportModule
   ],
   providers: [
     PrismaService,
@@ -39,6 +42,7 @@ import { UserController } from './user/controller/user.controller';
     EnterpriseService,
     UserService,
     AuthService,
+    JwtStrategy
   ],
   controllers: [EnterpriseController, AuthController, UserController],
 })
