@@ -16,7 +16,8 @@ export class UserRepositoryPrisma implements UserRepository {
                 email: user.email,
                 password: user.password,
                 enterprise_id: user.enterpriseId,
-                refresh_token_id: user.refreshToken
+                refresh_token_id: user.refreshToken,
+                role: user.role
             },
         });
 

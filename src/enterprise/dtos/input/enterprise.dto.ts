@@ -18,4 +18,9 @@ export class EnterpriseDto {
   @IsString()
   @Length(10, 11)
   phone?: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @Length(8, 8)
+  password: string;
 }

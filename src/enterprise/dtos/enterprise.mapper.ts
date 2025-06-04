@@ -9,6 +9,7 @@ export class EnterpriseMapper {
       name: enterprise.name,
       cnpj: enterprise.cnpj,
       phone: enterprise.phone,
+      email: enterprise.email,
     });
   }
 

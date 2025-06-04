@@ -10,12 +10,11 @@ import { UserController } from './user/controller/user.controller';
 import { UserService } from './user/services/user.service';
 import { EmailModule } from './email/email.module';
 import { ConfigModule } from '@nestjs/config';
-import * as fs from "fs";
 import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './auth/services/auth.service';
 import { RefreshTokenRepository } from './database/repositories/refresh-token-repository';
 import { AuthController } from './auth/controller/auth.controller';
-import { RefreshTokenRepositoryPrisma } from './database/prisma/refresh-token-repository-prisma'; // Supondo que exista
+import { RefreshTokenRepositoryPrisma } from './database/prisma/refreshToken-repository-prisma';
 
 @Module({
   imports: [
@@ -24,8 +23,8 @@ import { RefreshTokenRepositoryPrisma } from './database/prisma/refresh-token-re
       isGlobal: true,
     }),
     JwtModule.register({
-      privateKey: fs.readFileSync("./private.key", "utf-8"),
-      publicKey: fs.readFileSync("./public.key", "utf-8"),
+      privateKey: process.env.JWT_PRIVATE_KEY,
+      publicKey: process.env.JWT_PUBLIC_KEY,
       signOptions: { algorithm: "RS256" },
     }),
   ],

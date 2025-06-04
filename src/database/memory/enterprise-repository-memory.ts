@@ -13,4 +13,8 @@ export class EnterpriseRepositoryMemory implements EnterpriseRepository {
 
     return enterprise;
   }
+
+  async updateUserId(id: string, userId: string): Promise<void> {
+    throw new Error('Not implemented');
+  }
 }

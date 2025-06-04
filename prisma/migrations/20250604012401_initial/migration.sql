@@ -1,11 +1,27 @@
 -- CreateTable
+CREATE TABLE `Enterprise` (
+    `id` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `cnpj` VARCHAR(191) NOT NULL,
+    `email` VARCHAR(191) NOT NULL,
+    `phone` VARCHAR(191) NULL,
+    `admin_id` VARCHAR(191) NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NULL,
+
+    UNIQUE INDEX `Enterprise_cnpj_key`(`cnpj`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `User` (
     `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
     `email` VARCHAR(191) NOT NULL,
+    `role` VARCHAR(191) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
     `enterprise_id` VARCHAR(191) NOT NULL,
-    `refresh_token_id` VARCHAR(191) NOT NULL,
+    `refresh_token_id` VARCHAR(191) NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

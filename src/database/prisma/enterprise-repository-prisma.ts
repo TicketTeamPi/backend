@@ -38,4 +38,11 @@ export class EnterpriseRepositoryPrisma implements EnterpriseRepository {
 
     return enterprise;
   }
+
+  async updateUserId(id: string, userId: string): Promise<void> {
+    await this._prismaService.enterprise.update({
+      where: { id },
+      data: { admin_id: userId },
+    });
+  }
 }
