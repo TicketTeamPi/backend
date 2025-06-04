@@ -16,6 +16,7 @@ export class EnterpriseMapper {
     return new Enterprise(
       enterpriseDto.name,
       enterpriseDto.cnpj,
+      enterpriseDto.email,
       enterpriseDto.phone,
     );
   }

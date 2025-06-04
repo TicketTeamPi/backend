@@ -1,13 +1,17 @@
-import { Role, User } from '../models/user';
-import { UserDto } from './input/user.dto';
-import { UserResponse } from './output/user.response';
+import { User } from "../models/user";
+import { UserDto } from "./input/user.dto";
+import { UserResponseDto } from "./output/userResponse.dto";
 
 export class UserMapper {
-  static toUser(userDto: UserDto, password: string, role: Role): User {
-    return new User(userDto.name, userDto.email, password, role);
-  }
-
-  static toUserResponse(user: User): UserResponse {
-    return new UserResponse(user.id, user.name, user.email, user.role);
-  }
+    static toUserResponseDto(user: User): UserResponseDto {
+        return new UserResponseDto({ 
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            enterpriseId: user.enterpriseId,
+        });
+    }
+    static toUser(dto: UserDto, enterpriseId: string): User {
+        return new User(dto.name, dto.email, dto.password, enterpriseId);
+    }
 }

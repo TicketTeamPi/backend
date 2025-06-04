@@ -2,10 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { UserRepository } from '../../database/repositories/user-repository';
 import { UserDto } from '../dtos/input/user.dto';
 import { StringHelper } from '../../helpers/string-helper';
-import { User, UserRole } from '../models/user';
 import { UserMapper } from '../dtos/user.mapper';
-import { UserResponse } from '../dtos/output/user.response';
 import { EmailService } from 'src/email/services/email.service';
+import { UserResponseDto } from '../dtos/output/userResponse.dto';
 
 @Injectable()
 export class UserService {
@@ -13,7 +12,7 @@ export class UserService {
     private readonly _userRepository: UserRepository,
   private readonly _emailService: EmailService) {}
 
-  async create(userDto: UserDto): Promise<UserResponse> {
+  async create(userDto: UserDto): Promise<UserResponseDto> {
     const emailIsAlreadyInUse = await this._userRepository.findByEmail(
       userDto.email,
     );
@@ -23,11 +22,11 @@ export class UserService {
     }
 
     const password = StringHelper.generateRandomString(8);
-    const user = UserMapper.toUser(userDto, password, UserRole.USER);
+    const user = UserMapper.toUser(userDto, "XD");
 
     await this._userRepository.create(user);
 
-    const response = UserMapper.toUserResponse(user);
+    const response = UserMapper.toUserResponseDto(user);
 
     await this._emailService.sendCredentials({
       email: response.email,

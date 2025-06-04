@@ -8,12 +8,33 @@ datasource db {
 }
 
 model Enterprise {
-  id         String   @id @default(uuid())
+  id         String    @id @default(uuid())
   name       String
-  cnpj       String   @unique
-  phone      String?  
-  created_at DateTime @default(now())
-  updated_at DateTime? 
+  cnpj       String    @unique
+  email      String
+  phone      String?
+  created_at DateTime  @default(now())
+  updated_at DateTime?
+  user User[]
+}
+
+model User {
+ id       String    @id @default(uuid())
+ name     String
+ email    String
+ password String
+ enterprise_id String
+ enterprise  Enterprise @relation(fields: [enterprise_id], references: [id])
+ refresh_token_id String?
+ refreshToken RefreshToken?
+}
+
+model RefreshToken {
+  id         String    @id @default(uuid())
+  token      String
+  expires_at DateTime 
+  user_id    String @unique
+  user       User @relation(fields: [user_id], references: [id])
 }
 
 enum UserRole {
