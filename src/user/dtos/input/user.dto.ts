@@ -10,5 +10,5 @@ export class UserDto {
   email: string;
 
   @IsNotEmpty()
-  password: string;
+  enterpriseId: string;
 }

@@ -36,7 +36,7 @@ export class TicketService {
   async update(id: string, ticketDto: TicketDto): Promise<TicketResponse> {
     const ticket = TicketMapper.toTicket(ticketDto);
 
-    await this._ticketRepository.update(ticket);
+    await this._ticketRepository.update(ticket, id);
 
     return TicketMapper.toTicketResponse(ticket);
   }

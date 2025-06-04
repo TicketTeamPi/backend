@@ -55,9 +55,9 @@ export class TicketRepositoryPrisma implements TicketRepository {
     );
   }
 
-  async update(ticket: Ticket): Promise<void> {
+  async update(ticket: Ticket, id: string): Promise<void> {
     await this.prisma.ticket.update({
-      where: { id: ticket.id },
+      where: { id: id },
       data: {
         title: ticket.title,
         description: ticket.description,
@@ -79,11 +79,11 @@ export class TicketRepositoryPrisma implements TicketRepository {
     return tickets.map(
       (ticket) =>
         new Ticket(
-          ticket.id,
           ticket.title,
           ticket.description,
           ticket.status,
           ticket.responsible_id,
+          ticket.id,
         ),
     );
   }

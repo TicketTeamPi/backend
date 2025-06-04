@@ -23,7 +23,7 @@ export class UserService {
     }
 
     const password = StringHelper.generateRandomString(8);
-    const user = UserMapper.toUser(userDto, 'XD', 'USER');
+    const user = UserMapper.toUser(userDto, userDto.enterpriseId, 'USER', password);
 
     await this._userRepository.create(user);
 
