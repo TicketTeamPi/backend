@@ -36,4 +36,15 @@ export class UserService {
 
     return response;
   }
+
+  async findAll(): Promise<UserResponseDto[]> {
+    const userDtos = await this._userRepository.findAll();
+    return userDtos.map(user => new UserResponseDto({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      enterpriseId: user.enterpriseId,
+      role: user.role
+    }));
+  }
 }

@@ -15,6 +15,10 @@ import { AuthService } from './auth/services/auth.service';
 import { RefreshTokenRepository } from './database/repositories/refresh-token-repository';
 import { AuthController } from './auth/controller/auth.controller';
 import { RefreshTokenRepositoryPrisma } from './database/prisma/refreshToken-repository-prisma';
+import { TicketRepository } from './database/repositories/ticket-repository';
+import { TicketRepositoryPrisma } from './database/prisma/ticket-repository-prisma';
+import { TicketService } from './ticket/services/ticket.service';
+import { TicketController } from './ticket/controller/ticket.controller';
 
 @Module({
   imports: [
@@ -42,10 +46,20 @@ import { RefreshTokenRepositoryPrisma } from './database/prisma/refreshToken-rep
       provide: RefreshTokenRepository,
       useClass: RefreshTokenRepositoryPrisma,
     },
+    {
+      provide: TicketRepository,
+      useClass: TicketRepositoryPrisma,
+    },
     EnterpriseService,
     UserService,
     AuthService,
+    TicketService,
   ],
-  controllers: [EnterpriseController, UserController, AuthController],
+  controllers: [
+    EnterpriseController,
+    UserController,
+    AuthController,
+    TicketController,
+  ],
 })
 export class AppModule {}

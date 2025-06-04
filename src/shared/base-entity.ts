@@ -5,8 +5,8 @@ export class BaseEntity {
   private readonly _created_at: Date;
   private readonly _updated_at?: Date;
 
-  constructor() {
-    this._id = randomUUID();
+  constructor(id: string | null = null) {
+    this._id = id || randomUUID();
     this._created_at = new Date();
   }
 

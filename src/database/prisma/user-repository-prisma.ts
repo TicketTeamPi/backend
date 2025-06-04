@@ -38,8 +38,23 @@ export class UserRepositoryPrisma implements UserRepository {
                 user.email,
                 user.password,
                 user.enterprise_id,
+                user.role,
                 user.refresh_token_id ? user.refresh_token_id : undefined
             )
             : undefined;
+    }
+
+    async findAll(): Promise<UserBdDto[]> {
+        const users = await this._prismaService.user.findMany();
+
+        return users.map(user => new UserBdDto(
+            user.id,
+            user.name,
+            user.email,
+            user.password,
+            user.enterprise_id,
+            user.role,
+            user.refresh_token_id ? user.refresh_token_id : undefined
+        ));
     }
 }
