@@ -15,7 +15,7 @@ export class Enterprise extends BaseEntity {
     phone?: string,
     adminId?: string,
     admin?: User,
-    id?: string
+    id?: string,
   ) {
     super();
     this._name = name;
@@ -36,7 +36,7 @@ export class Enterprise extends BaseEntity {
   get phone(): string | undefined {
     return this._phone;
   }
-  
+
   get email(): string {
     return this._email;
   }

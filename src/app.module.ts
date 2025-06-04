@@ -29,7 +29,7 @@ import { TicketController } from './ticket/controller/ticket.controller';
     JwtModule.register({
       privateKey: process.env.JWT_PRIVATE_KEY,
       publicKey: process.env.JWT_PUBLIC_KEY,
-      signOptions: { algorithm: "RS256" },
+      signOptions: { algorithm: 'RS256' },
     }),
   ],
   providers: [

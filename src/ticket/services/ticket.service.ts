@@ -1,14 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { TicketRepository } from 'src/database/repositories/ticket-repository';  
+import { TicketRepository } from 'src/database/repositories/ticket-repository';
 import { TicketDto } from '../dto/input/tickect.dto';
 import { TicketMapper } from '../dto/ticket.mapper';
 import { TicketResponse } from '../dto/output/ticket.response';
 
 @Injectable()
 export class TicketService {
-  constructor(
-    private readonly _ticketRepository: TicketRepository,
-  ) {}
+  constructor(private readonly _ticketRepository: TicketRepository) {}
 
   async create(ticketDto: TicketDto): Promise<TicketResponse> {
     const ticket = TicketMapper.toTicket(ticketDto);
@@ -16,7 +14,7 @@ export class TicketService {
     await this._ticketRepository.create(ticket);
 
     return TicketMapper.toTicketResponse(ticket);
-  } 
+  }
 
   async findById(id: string): Promise<TicketResponse> {
     const ticket = await this._ticketRepository.findById(id);
@@ -29,7 +27,8 @@ export class TicketService {
   }
 
   async findByResponsibleId(responsibleId: string): Promise<TicketResponse[]> {
-    const tickets = await this._ticketRepository.findByResponsibleId(responsibleId);
+    const tickets =
+      await this._ticketRepository.findByResponsibleId(responsibleId);
 
     return tickets.map(TicketMapper.toTicketResponse);
   }

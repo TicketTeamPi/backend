@@ -26,13 +26,15 @@ export class EnterpriseService {
 
     await this._enterpriseRepository.create(enterprise);
 
-    const user = await this._userRepository.create(new User(
-      enterprise.name,
-      enterprise.email,
-      enterpriseDto.password,
-      'ADMIN',
-      enterprise.id,
-    ));
+    const user = await this._userRepository.create(
+      new User(
+        enterprise.name,
+        enterprise.email,
+        enterpriseDto.password,
+        'ADMIN',
+        enterprise.id,
+      ),
+    );
 
     await this._enterpriseRepository.updateUserId(enterprise.id, user.id);
 

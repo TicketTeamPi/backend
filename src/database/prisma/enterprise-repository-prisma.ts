@@ -19,7 +19,7 @@ export class EnterpriseRepositoryPrisma implements EnterpriseRepository {
           enterprise.name,
           enterprise.cnpj,
           enterprise.email,
-          enterprise.phone? enterprise.phone : undefined,
+          enterprise.phone ? enterprise.phone : undefined,
         )
       : undefined;
   }

@@ -1,19 +1,19 @@
-import { Controller, Body, Post } from "@nestjs/common";
-import { AuthService } from "../services/auth.service";
-import { LoginDto } from "../dtos/input/Login.dto";
+import { Controller, Body, Post } from '@nestjs/common';
+import { AuthService } from '../services/auth.service';
+import { LoginDto } from '../dtos/input/Login.dto';
 
-@Controller("auth")
+@Controller('auth')
 export class AuthController {
-    constructor(private readonly _authService: AuthService) {}
-    
-    @Post("login")
-    async login(@Body() body: LoginDto) {
-        const jwt = this._authService.login(body);
-        return jwt;
-    }
-    
-    // @Post("refresh-token")
-    // async refreshToken(@Body() body: RefreshTokenDto) {
-    //     return this._authService.refreshToken(body);
-    // }
+  constructor(private readonly _authService: AuthService) {}
+
+  @Post('login')
+  async login(@Body() body: LoginDto) {
+    const jwt = this._authService.login(body);
+    return jwt;
+  }
+
+  // @Post("refresh-token")
+  // async refreshToken(@Body() body: RefreshTokenDto) {
+  //     return this._authService.refreshToken(body);
+  // }
 }
