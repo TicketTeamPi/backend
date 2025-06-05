@@ -21,7 +21,6 @@ export class UserController {
     async updatePassword(@Req() req, @Res() res: Response, @Body() body: userPasswordDto) {
         const token = req.cookies.jwt;
         const decodifyToken = jwt.verify(token, fs.readFileSync('./public.key', 'utf8'), { algorithms: ['RS256'] });
-        console.log(decodifyToken['id']);
         await this._userService.updatePassword(decodifyToken['id'], body);
 
         return res.status(204).send();
