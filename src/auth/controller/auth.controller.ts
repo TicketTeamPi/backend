@@ -1,9 +1,7 @@
-import { Controller, Body, Post, Res, Session, Req } from "@nestjs/common";
+import { Controller, Body, Post, Res, Req } from "@nestjs/common";
 import { Response } from "express";
 import { AuthService } from "../services/auth.service";
 import { LoginDto } from "../dtos/input/Login.dto";
-import * as jwt from 'jsonwebtoken';
-import * as fs from 'fs';
 
 
 @Controller("auth")
