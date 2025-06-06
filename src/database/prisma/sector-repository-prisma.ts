@@ -29,4 +29,19 @@ export class SectorRepositoryPrisma implements SectorRepository {
             (sector) => new Sector(sector.id, sector.name, sector.enterprise_id),
         );
     }
+
+    async findByNameAndEnterpriseId(name: string, enterpriseId: string): Promise<Sector | null> {
+        const sector = await this.prisma.sector.findFirst({
+            where: {
+                name,
+                enterprise_id: enterpriseId,
+            },
+        });
+
+        if (!sector) {
+            return null;
+        }
+
+        return new Sector(sector.id, sector.name, sector.enterprise_id);
+    }
 }

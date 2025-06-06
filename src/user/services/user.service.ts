@@ -14,7 +14,7 @@ export class UserService {
     private readonly _userRepository: UserRepository,
     private readonly _emailService: EmailService,
     private readonly _sectorRepository: SectorRepository
-  ) {}
+  ) { }
 
   async create(userDto: UserDto, enterpriseId: string): Promise<UserResponseDto> {
     const emailIsAlreadyInUse = await this._userRepository.findByEmail(
@@ -28,13 +28,15 @@ export class UserService {
     const password = StringHelper.generateRandomString(8);
     const user = UserMapper.toUser(
       userDto,
-      userDto.enterpriseId,
+      enterpriseId,
       password,
     );
 
     await this._userRepository.create(user);
 
-    await this._sectorRepository.create(userDto.sector, enterpriseId);
+    if (await !this._sectorRepository.findByNameAndEnterpriseId(userDto.sector, enterpriseId)) {
+      await this._sectorRepository.create(userDto.sector, enterpriseId);
+    }
 
     const response = UserMapper.toUserResponseDto(user);
 
@@ -70,6 +72,6 @@ export class UserService {
       throw new Error('Senha atual incorreta.');
     }
     user.password = dto.newPassword;
-    await this._userRepository.update(UserMapper.toUserfromBdDto(user));
+    await this._userRepository.update(user);
   }
 }

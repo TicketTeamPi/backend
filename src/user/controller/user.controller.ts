@@ -16,16 +16,17 @@ import * as jwt from 'jsonwebtoken';
 import * as fs from 'fs';
 import { Response } from 'express';
 
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard("jwt"))
 @Controller('user')
 export class UserController {
   constructor(private readonly _userService: UserService) {}
 
   @Post()
-  async create(@Req() req, @Body() body: UserDto) {
+  async create(@Req() req, @Res() res: Response, @Body() body: UserDto) {
     const token = req.cookies.jwt;
-    const decodifyToken = jwt.verify(token,fs.readFileSync('./public.key', 'utf8'),{ algorithms: ['RS256'] },);
-    return this._userService.create(body, decodifyToken['ennterpriseId']);
+    const decodifyToken = jwt.verify(token, fs.readFileSync('./public.key', 'utf8'), { algorithms: ['RS256'] });
+    const user = await this._userService.create(body, decodifyToken['enterpriseId']);
+    return res.status(201).json(user);
   }
 
   @Get()

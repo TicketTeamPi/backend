@@ -44,7 +44,7 @@ export class UserRepositoryPrisma implements UserRepository {
       : undefined;
   }
 
-  async update(user: User): Promise<void> {
+  async update(user: UserBdDto): Promise<void> {
     await this._prismaService.user.update({
       where: {
         id: user.id,
@@ -52,6 +52,7 @@ export class UserRepositoryPrisma implements UserRepository {
       data: {
         name: user.name,
         email: user.email,
+        sector: user.sector,
         password: user.password,
         enterprise_id: user.enterpriseId,
         refresh_token_id: user.refreshToken,

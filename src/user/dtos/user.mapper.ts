@@ -21,14 +21,4 @@ export class UserMapper {
     return new User(dto.name, dto.email, password, dto.sector, enterpriseId);
   }
 
-  static toUserfromBdDto(user: UserBdDto): User {
-    return new User(
-      user.name,
-      user.email,
-      user.password,
-      user.enterpriseId,
-      user.id,
-      user.refreshToken,
-    );
-  }
 }

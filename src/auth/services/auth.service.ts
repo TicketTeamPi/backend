@@ -59,9 +59,8 @@ export class AuthService {
         }
         const createdRT = await this._refreshTokenRepository.create(new RefreshToken(userBdDto.id, cookieJwt, new Date(Date.now() + 24 * 60 * 60 * 1000)));
         userBdDto.refreshToken = createdRT.id;
-        const user = UserMapper.toUserfromBdDto(userBdDto);
 
-        await this._userRepository.update(user);
+        await this._userRepository.update(userBdDto);
 
         return createdRT.id;
     }

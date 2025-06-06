@@ -66,6 +66,7 @@ import { SectorController } from './sector/controller/sector.controller';
     UserService,
     AuthService,
     TicketService,
+    JwtStrategy,
     SectorService,
   ],
   controllers: [

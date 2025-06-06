@@ -9,9 +9,6 @@ export class UserDto {
   @IsNotEmpty()
   email: string;
 
-  @IsNotEmpty()
-  enterpriseId: string;
-
   @IsString()
   @IsNotEmpty()
   sector: string;
