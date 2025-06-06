@@ -31,33 +31,49 @@ export class UserRepositoryPrisma implements UserRepository {
       },
     });
 
-    return user
-      ? new UserBdDto(
-          user.id,
-          user.name,
-          user.email,
-          user.password,
-          user.enterprise_id,
-          user.role,
-          user.refresh_token_id ? user.refresh_token_id : undefined,
-        )
-      : undefined;
-  }
+        return user
+            ? new UserBdDto(
+                user.id,
+                user.name,
+                user.email,
+                user.password,
+                user.enterprise_id,
+                user.refresh_token_id ? user.refresh_token_id : undefined
+            )
+            : undefined;
+    }
 
-  async findAll(): Promise<UserBdDto[]> {
-    const users = await this._prismaService.user.findMany();
+    async update(user: User): Promise<void> {
+        await this._prismaService.user.update({
+            where: {
+                id: user.id,
+            },
+            data: {
+                name: user.name,
+                email: user.email,
+                password: user.password,
+                enterprise_id: user.enterpriseId,
+                refresh_token_id: user.refreshToken
+            },
+        });
+    }
 
-    return users.map(
-      (user) =>
-        new UserBdDto(
-          user.id,
-          user.name,
-          user.email,
-          user.password,
-          user.enterprise_id,
-          user.role,
-          user.refresh_token_id ? user.refresh_token_id : undefined,
-        ),
-    );
-  }
+    async findById(id: string): Promise<UserBdDto | undefined> {
+        const user = await this._prismaService.user.findUnique({
+            where: {
+                id,
+            },
+        });
+
+        return user
+            ? new UserBdDto(
+                user.id,
+                user.name,
+                user.email,
+                user.password,
+                user.enterprise_id,
+                user.refresh_token_id ? user.refresh_token_id : undefined
+            )
+            : undefined;
+    }
 }

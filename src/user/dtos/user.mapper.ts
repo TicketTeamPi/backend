@@ -1,6 +1,7 @@
 import { User } from '../models/user';
 import { UserDto } from './input/user.dto';
 import { UserResponseDto } from './output/userResponse.dto';
+import { UserBdDto } from './input/user.bd.dto';
 
 export class UserMapper {
   static toUserResponseDto(user: User): UserResponseDto {
@@ -15,4 +16,9 @@ export class UserMapper {
   static toUser(dto: UserDto, enterpriseId: string, role: string, password: string): User {
     return new User(dto.name, dto.email, password, role, enterpriseId);
   }
+
+  static toUserfromBdDto(user: UserBdDto): User {
+    return new User(user.name, user.email, user.password, user.enterpriseId,  user.id,user.refreshToken,);
+  }
 }
+
