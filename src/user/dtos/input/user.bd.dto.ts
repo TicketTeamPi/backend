@@ -5,7 +5,7 @@ export class UserBdDto {
   password: string;
   enterpriseId: string;
   refreshToken?: string;
-  role: string;
+  sector: string;
 
   constructor(
     id: string,
@@ -13,7 +13,7 @@ export class UserBdDto {
     email: string,
     password: string,
     enterpriseId: string,
-    role: string,
+    sector: string,
     refreshToken?: string,
   ) {
     this.id = id;
@@ -21,7 +21,7 @@ export class UserBdDto {
     this.email = email;
     this.password = password;
     this.enterpriseId = enterpriseId;
-    this.role = role;
+    this.sector = sector;
     this.refreshToken = refreshToken;
   }
 }

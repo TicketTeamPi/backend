@@ -4,18 +4,19 @@ import { UserResponseDto } from '../dtos/output/userResponse.dto';
 import { UserDto } from '../dtos/input/user.dto';
 import { StringHelper } from '../../helpers/string-helper';
 import { UserMapper } from '../dtos/user.mapper';
-import { EmailService } from 'src/email/services/email.service';
-
+import { EmailService } from '../../email/services/email.service';
 import { userPasswordDto } from '../dtos/input/user-password.dto';
+import { SectorRepository } from '../../database/repositories/sector-repository';
 
 @Injectable()
 export class UserService {
   constructor(
     private readonly _userRepository: UserRepository,
     private readonly _emailService: EmailService,
+    private readonly _sectorRepository: SectorRepository
   ) {}
 
-  async create(userDto: UserDto): Promise<UserResponseDto> {
+  async create(userDto: UserDto, enterpriseId: string): Promise<UserResponseDto> {
     const emailIsAlreadyInUse = await this._userRepository.findByEmail(
       userDto.email,
     );
@@ -28,11 +29,12 @@ export class UserService {
     const user = UserMapper.toUser(
       userDto,
       userDto.enterpriseId,
-      'USER',
       password,
     );
 
     await this._userRepository.create(user);
+
+    await this._sectorRepository.create(userDto.sector, enterpriseId);
 
     const response = UserMapper.toUserResponseDto(user);
 
@@ -54,7 +56,7 @@ export class UserService {
           name: user.name,
           email: user.email,
           enterpriseId: user.enterpriseId,
-          role: user.role,
+          role: user.sector,
         }),
     );
   }

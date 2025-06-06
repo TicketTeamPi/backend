@@ -6,7 +6,7 @@ import { UserBdDto } from 'src/user/dtos/input/user.bd.dto';
 
 @Injectable()
 export class UserRepositoryPrisma implements UserRepository {
-  constructor(private readonly _prismaService: PrismaService) {}
+  constructor( private readonly _prismaService: PrismaService) {}
 
   async create(user: User): Promise<User> {
     await this._prismaService.user.create({
@@ -17,7 +17,7 @@ export class UserRepositoryPrisma implements UserRepository {
         password: user.password,
         enterprise_id: user.enterpriseId,
         refresh_token_id: user.refreshToken,
-        role: user.role,
+        sector: user.sector,
       },
     });
 
@@ -38,6 +38,7 @@ export class UserRepositoryPrisma implements UserRepository {
           user.email,
           user.password,
           user.enterprise_id,
+          user.sector,
           user.refresh_token_id ? user.refresh_token_id : undefined,
         )
       : undefined;
@@ -72,9 +73,26 @@ export class UserRepositoryPrisma implements UserRepository {
           user.email,
           user.password,
           user.enterprise_id,
-          user.role,
+          user.sector,
           user.refresh_token_id ?? undefined,
         )
       : undefined;
+  }
+
+  async findAll(): Promise<UserBdDto[]> {
+    const users = await this._prismaService.user.findMany();
+
+    return users.map(
+      (user) =>
+        new UserBdDto(
+          user.id,
+          user.name,
+          user.email,
+          user.password,
+          user.enterprise_id,
+          user.sector,
+          user.refresh_token_id ?? undefined,
+        ),
+    );
   }
 }

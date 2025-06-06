@@ -16,10 +16,9 @@ export class UserMapper {
   static toUser(
     dto: UserDto,
     enterpriseId: string,
-    role: string,
     password: string,
   ): User {
-    return new User(dto.name, dto.email, password, role, enterpriseId);
+    return new User(dto.name, dto.email, password, dto.sector, enterpriseId);
   }
 
   static toUserfromBdDto(user: UserBdDto): User {

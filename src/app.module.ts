@@ -22,6 +22,10 @@ import { UserController } from './user/controller/user.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './shared/jwt-strategy';
 import { RefreshTokenRepositoryPrisma } from './database/prisma/refreshToken-repository-prisma';
+import { SectorRepository } from './database/repositories/sector-repository';
+import { SectorRepositoryPrisma } from './database/prisma/sector-repository-prisma';
+import { SectorService } from './sector/service/sector.service';
+import { SectorController } from './sector/controller/sector.controller';
 
 @Module({
   imports: [
@@ -54,17 +58,22 @@ import { RefreshTokenRepositoryPrisma } from './database/prisma/refreshToken-rep
       provide: TicketRepository,
       useClass: TicketRepositoryPrisma,
     },
+    {
+      provide: SectorRepository,
+      useClass: SectorRepositoryPrisma,
+    },
     EnterpriseService,
     UserService,
     AuthService,
     TicketService,
+    SectorService,
   ],
   controllers: [
     EnterpriseController,
     UserController,
     AuthController,
     TicketController,
-    JwtStrategy,
+    SectorController
   ],
 })
 export class AppModule {}

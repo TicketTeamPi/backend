@@ -27,10 +27,11 @@ export class AuthService {
 
     return await this.generateToken(user);
   }
+  
 
-  async refreshToken(id: string): Promise<string> {
+  async verifyRefreshToken(id: string): Promise<string> {
     const refreshToken = await this._refreshTokenRepository.findById(id);
-    let token: string;
+    let token: string = '';
 
     if (refreshToken) {
       if (refreshToken.expiresAt > new Date()) {
@@ -48,8 +49,25 @@ export class AuthService {
     return token;
   }
 
+  async createRefreshToken(email: string, cookieJwt: string): Promise<string> {
+        const userBdDto = await this._userRepository.findByEmail(email);
+        if (!userBdDto) {
+            throw new Error("Usuário não encontrado.");
+        }
+        if (userBdDto.refreshToken) {
+            await this._refreshTokenRepository.deleteById(userBdDto.refreshToken);
+        }
+        const createdRT = await this._refreshTokenRepository.create(new RefreshToken(userBdDto.id, cookieJwt, new Date(Date.now() + 24 * 60 * 60 * 1000)));
+        userBdDto.refreshToken = createdRT.id;
+        const user = UserMapper.toUserfromBdDto(userBdDto);
+
+        await this._userRepository.update(user);
+
+        return createdRT.id;
+    }
+
   private async generateToken(user: UserBdDto): Promise<string> {
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user.id, email: user.email, enterpriseId: user.enterpriseId };
     return this._jwtService.signAsync(payload);
   }
 }

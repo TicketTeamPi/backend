@@ -4,7 +4,7 @@ export class User extends BaseEntity {
   private readonly _name: string;
   private readonly _email: string;
   private readonly _password: string;
-  private readonly _role: string;
+  private readonly _sector: string;
   private readonly _enterpriseId: string;
   private readonly _refreshTokenId?: string;
 
@@ -12,7 +12,7 @@ export class User extends BaseEntity {
     name: string,
     email: string,
     password: string,
-    role: string,
+    sector: string,
     enterpriseId: string,
     refreshToken?: string,
   ) {
@@ -20,7 +20,7 @@ export class User extends BaseEntity {
     this._name = name;
     this._email = email;
     this._password = password;
-    this._role = role;
+    this._sector = sector;
     this._enterpriseId = enterpriseId;
     this._refreshTokenId = refreshToken;
   }
@@ -37,8 +37,8 @@ export class User extends BaseEntity {
     return this._password;
   }
 
-  get role(): string {
-    return this._role;
+  get sector(): string {
+    return this._sector;
   }
 
   get enterpriseId(): string {

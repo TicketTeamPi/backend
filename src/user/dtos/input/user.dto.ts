@@ -11,4 +11,8 @@ export class UserDto {
 
   @IsNotEmpty()
   enterpriseId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  sector: string;
 }

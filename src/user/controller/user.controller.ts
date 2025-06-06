@@ -22,8 +22,10 @@ export class UserController {
   constructor(private readonly _userService: UserService) {}
 
   @Post()
-  async create(@Body() body: UserDto) {
-    return this._userService.create(body);
+  async create(@Req() req, @Body() body: UserDto) {
+    const token = req.cookies.jwt;
+    const decodifyToken = jwt.verify(token,fs.readFileSync('./public.key', 'utf8'),{ algorithms: ['RS256'] },);
+    return this._userService.create(body, decodifyToken['ennterpriseId']);
   }
 
   @Get()

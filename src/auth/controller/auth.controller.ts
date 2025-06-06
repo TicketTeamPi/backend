@@ -26,7 +26,7 @@ export class AuthController {
   @Post('refresh-token')
   async refreshToken(@Req() req, @Res() res: Response) {
     const token = req.cookies.refreshToken;
-    const newJwt = await this._authService.refreshToken(token);
+    const newJwt = await this._authService.verifyRefreshToken(token);
     if (newJwt) {
       res.cookie('jwt', newJwt, {
         httpOnly: true,

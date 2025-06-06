@@ -17,13 +17,14 @@ model Enterprise {
   created_at DateTime  @default(now())
   updated_at DateTime?
   user       User[]
+  sector     sector[]
 }
 
 model User {
   id               String        @id @default(uuid())
   name             String
   email            String
-  role             String
+  sector             String
   password         String
   enterprise_id    String
   enterprise       Enterprise    @relation(fields: [enterprise_id], references: [id])
@@ -35,7 +36,7 @@ model User {
 
 model RefreshToken {
   id         String   @id @default(uuid())
-  token      String
+  token      String   @db.Text
   expires_at DateTime
   user_id    String   @unique
   user       User     @relation(fields: [user_id], references: [id])
@@ -48,4 +49,11 @@ model Ticket {
   status         String
   responsible_id String
   responsible    User   @relation("UserTickets", fields: [responsible_id], references: [id])
+}
+
+model sector {
+  id               String @id @default(uuid())
+  name             String 
+  enterprise_id    String
+  enterprise       Enterprise @relation(fields: [enterprise_id], references: [id])
 }
