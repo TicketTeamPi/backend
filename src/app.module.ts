@@ -10,7 +10,7 @@ import { TicketRepository } from './database/repositories/ticket-repository';
 import { TicketRepositoryPrisma } from './database/prisma/ticket-repository-prisma';
 import { TicketService } from './ticket/services/ticket.service';
 import { TicketController } from './ticket/controller/ticket.controller';
-import * as fs from "fs";
+import * as fs from 'fs';
 import { JwtModule } from '@nestjs/jwt';
 import { UserService } from './user/services/user.service';
 import { AuthService } from './auth/services/auth.service';
@@ -30,11 +30,11 @@ import { RefreshTokenRepositoryPrisma } from './database/prisma/refreshToken-rep
       isGlobal: true,
     }),
     JwtModule.register({
-      privateKey: fs.readFileSync("./private.key", "utf-8"),
-      publicKey: fs.readFileSync("./public.key", "utf-8"),
-      signOptions: {algorithm: "RS256"}
+      privateKey: fs.readFileSync('./private.key', 'utf-8'),
+      publicKey: fs.readFileSync('./public.key', 'utf-8'),
+      signOptions: { algorithm: 'RS256' },
     }),
-    PassportModule
+    PassportModule,
   ],
   providers: [
     PrismaService,
@@ -64,7 +64,7 @@ import { RefreshTokenRepositoryPrisma } from './database/prisma/refreshToken-rep
     UserController,
     AuthController,
     TicketController,
-    JwtStrategy
+    JwtStrategy,
   ],
 })
 export class AppModule {}

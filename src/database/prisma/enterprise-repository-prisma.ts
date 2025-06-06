@@ -28,7 +28,7 @@ export class EnterpriseRepositoryPrisma implements EnterpriseRepository {
     await this._prismaService.enterprise.create({
       data: {
         id: enterprise.id,
-        name: enterprise.name,  
+        name: enterprise.name,
         cnpj: enterprise.cnpj,
         phone: enterprise.phone,
         created_at: enterprise.created_at,

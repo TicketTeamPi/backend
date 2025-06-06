@@ -6,7 +6,7 @@ import { StringHelper } from '../../helpers/string-helper';
 import { UserMapper } from '../dtos/user.mapper';
 import { EmailService } from 'src/email/services/email.service';
 
-import { userPasswordDto } from "../dtos/input/user-password.dto";
+import { userPasswordDto } from '../dtos/input/user-password.dto';
 
 @Injectable()
 export class UserService {
@@ -25,7 +25,12 @@ export class UserService {
     }
 
     const password = StringHelper.generateRandomString(8);
-    const user = UserMapper.toUser(userDto, userDto.enterpriseId, 'USER', password);
+    const user = UserMapper.toUser(
+      userDto,
+      userDto.enterpriseId,
+      'USER',
+      password,
+    );
 
     await this._userRepository.create(user);
 
@@ -57,10 +62,10 @@ export class UserService {
   async updatePassword(id: string, dto: userPasswordDto): Promise<void> {
     const user = await this._userRepository.findById(id);
     if (!user) {
-      throw new Error("Usuário não encontrado.");
+      throw new Error('Usuário não encontrado.');
     }
     if (user.password !== dto.currentPassword) {
-      throw new Error("Senha atual incorreta.");
+      throw new Error('Senha atual incorreta.');
     }
     user.password = dto.newPassword;
     await this._userRepository.update(UserMapper.toUserfromBdDto(user));

@@ -13,12 +13,23 @@ export class UserMapper {
     });
   }
 
-  static toUser(dto: UserDto, enterpriseId: string, role: string, password: string): User {
+  static toUser(
+    dto: UserDto,
+    enterpriseId: string,
+    role: string,
+    password: string,
+  ): User {
     return new User(dto.name, dto.email, password, role, enterpriseId);
   }
 
   static toUserfromBdDto(user: UserBdDto): User {
-    return new User(user.name, user.email, user.password, user.enterpriseId,  user.id,user.refreshToken,);
+    return new User(
+      user.name,
+      user.email,
+      user.password,
+      user.enterpriseId,
+      user.id,
+      user.refreshToken,
+    );
   }
 }
-
