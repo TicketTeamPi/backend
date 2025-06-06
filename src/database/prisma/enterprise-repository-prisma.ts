@@ -7,10 +7,10 @@ import { EnterpriseRepository } from '../repositories/enterprise-repository';
 export class EnterpriseRepositoryPrisma implements EnterpriseRepository {
   constructor(private readonly _prismaService: PrismaService) {}
 
-  async findByCnpj(email: string): Promise<Enterprise | undefined> {
+  async findByCnpj(cnpj: string): Promise<Enterprise | undefined> {
     const enterprise = await this._prismaService.enterprise.findFirst({
       where: {
-        email,
+        cnpj,
       },
     });
 
@@ -19,7 +19,7 @@ export class EnterpriseRepositoryPrisma implements EnterpriseRepository {
           enterprise.name,
           enterprise.cnpj,
           enterprise.email,
-          enterprise.phone? enterprise.phone : undefined,
+          enterprise.phone ? enterprise.phone : undefined,
         )
       : undefined;
   }
@@ -28,7 +28,7 @@ export class EnterpriseRepositoryPrisma implements EnterpriseRepository {
     await this._prismaService.enterprise.create({
       data: {
         id: enterprise.id,
-        name: enterprise.name,  
+        name: enterprise.name,
         cnpj: enterprise.cnpj,
         phone: enterprise.phone,
         created_at: enterprise.created_at,
@@ -37,5 +37,12 @@ export class EnterpriseRepositoryPrisma implements EnterpriseRepository {
     });
 
     return enterprise;
+  }
+
+  async updateUserId(id: string, userId: string): Promise<void> {
+    await this._prismaService.enterprise.update({
+      where: { id },
+      data: { admin_id: userId },
+    });
   }
 }

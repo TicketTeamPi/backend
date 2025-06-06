@@ -1,18 +1,21 @@
 export class UserResponseDto {
-    readonly id: string;
-    readonly name: string;
-    readonly email: string;
-    readonly enterpriseId: string;
+  readonly id: string;
+  readonly name: string;
+  readonly email: string;
+  readonly enterpriseId: string;
+  readonly role?: string;
 
-    constructor(props: {
-        id: string;
-        name: string;
-        email: string;
-        enterpriseId: string;
-    }) {
-        this.id = props.id;
-        this.name = props.name;
-        this.email = props.email;
-        this.enterpriseId = props.enterpriseId;
-    }
+  constructor(props: {
+    id: string;
+    name: string;
+    email: string;
+    enterpriseId: string;
+    role?: string;
+  }) {
+    this.id = props.id;
+    this.name = props.name;
+    this.email = props.email;
+    this.enterpriseId = props.enterpriseId;
+    this.role = props.role;
+  }
 }

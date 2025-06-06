@@ -4,7 +4,13 @@ import { EnterpriseController } from './enterprise/controller/enterprise.control
 import { EnterpriseRepositoryPrisma } from './database/prisma/enterprise-repository-prisma';
 import { EnterpriseService } from './enterprise/services/enterprise.service';
 import { EnterpriseRepository } from './database/repositories/enterprise-repository';
-import * as fs from "fs";
+import { EmailModule } from './email/email.module';
+import { ConfigModule } from '@nestjs/config';
+import { TicketRepository } from './database/repositories/ticket-repository';
+import { TicketRepositoryPrisma } from './database/prisma/ticket-repository-prisma';
+import { TicketService } from './ticket/services/ticket.service';
+import { TicketController } from './ticket/controller/ticket.controller';
+import * as fs from 'fs';
 import { JwtModule } from '@nestjs/jwt';
 import { UserService } from './user/services/user.service';
 import { AuthService } from './auth/services/auth.service';
@@ -19,12 +25,16 @@ import { RefreshTokenRepositoryPrisma } from './database/prisma/refreshToken-rep
 
 @Module({
   imports: [
-    JwtModule.register({
-      privateKey: fs.readFileSync("./private.key", "utf-8"),
-      publicKey: fs.readFileSync("./public.key", "utf-8"),
-      signOptions: {algorithm: "RS256"}
+    EmailModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
-    PassportModule
+    JwtModule.register({
+      privateKey: fs.readFileSync('./private.key', 'utf-8'),
+      publicKey: fs.readFileSync('./public.key', 'utf-8'),
+      signOptions: { algorithm: 'RS256' },
+    }),
+    PassportModule,
   ],
   providers: [
     PrismaService,
@@ -33,18 +43,28 @@ import { RefreshTokenRepositoryPrisma } from './database/prisma/refreshToken-rep
       useClass: EnterpriseRepositoryPrisma,
     },
     {
+      provide: UserRepository,
+      useClass: UserRepositoryPrisma,
+    },
+    {
       provide: RefreshTokenRepository,
       useClass: RefreshTokenRepositoryPrisma,
     },
     {
-      provide: UserRepository,
-      useClass: UserRepositoryPrisma
+      provide: TicketRepository,
+      useClass: TicketRepositoryPrisma,
     },
     EnterpriseService,
     UserService,
     AuthService,
-    JwtStrategy
+    TicketService,
   ],
-  controllers: [EnterpriseController, AuthController, UserController],
+  controllers: [
+    EnterpriseController,
+    UserController,
+    AuthController,
+    TicketController,
+    JwtStrategy,
+  ],
 })
-export class AppModule { }
+export class AppModule {}

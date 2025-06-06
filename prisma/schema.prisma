@@ -13,26 +13,39 @@ model Enterprise {
   cnpj       String    @unique
   email      String
   phone      String?
+  admin_id   String?
   created_at DateTime  @default(now())
   updated_at DateTime?
-  user User[]
+  user       User[]
 }
 
 model User {
- id       String    @id @default(uuid())
- name     String
- email    String
- password String
- enterprise_id String
- enterprise  Enterprise @relation(fields: [enterprise_id], references: [id])
- refresh_token_id String?
- refreshToken RefreshToken?
+  id               String        @id @default(uuid())
+  name             String
+  email            String
+  role             String
+  password         String
+  enterprise_id    String
+  enterprise       Enterprise    @relation(fields: [enterprise_id], references: [id])
+  refresh_token_id String?
+  refreshToken     RefreshToken?
+
+  tickets Ticket[] @relation("UserTickets")
 }
 
 model RefreshToken {
-  id         String    @id @default(uuid())
-  token      String    @db.Text
-  expires_at DateTime 
-  user_id    String @unique
-  user       User @relation(fields: [user_id], references: [id])
+  id         String   @id @default(uuid())
+  token      String
+  expires_at DateTime
+  user_id    String   @unique
+  user       User     @relation(fields: [user_id], references: [id])
+}
+
+model Ticket {
+  id             String @id @default(uuid())
+  title          String
+  description    String
+  status         String
+  responsible_id String
+  responsible    User   @relation("UserTickets", fields: [responsible_id], references: [id])
 }
