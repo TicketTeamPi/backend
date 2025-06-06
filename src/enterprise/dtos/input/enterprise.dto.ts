@@ -9,6 +9,10 @@ export class EnterpriseDto {
   @IsNotEmpty()
   @Length(14)
   cnpj: string;
+
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
   
   @IsNotEmpty()
   @IsString()

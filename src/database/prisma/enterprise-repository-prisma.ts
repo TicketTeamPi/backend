@@ -18,8 +18,8 @@ export class EnterpriseRepositoryPrisma implements EnterpriseRepository {
       ? new Enterprise(
           enterprise.name,
           enterprise.cnpj,
-          enterprise.email!,
-          enterprise.phone!,
+          enterprise.email,
+          enterprise.phone? enterprise.phone : undefined,
         )
       : undefined;
   }
@@ -28,11 +28,11 @@ export class EnterpriseRepositoryPrisma implements EnterpriseRepository {
     await this._prismaService.enterprise.create({
       data: {
         id: enterprise.id,
-        created_at: enterprise.created_at,
-        name: enterprise.name,
+        name: enterprise.name,  
         cnpj: enterprise.cnpj,
-        email: enterprise.email,
         phone: enterprise.phone,
+        created_at: enterprise.created_at,
+        email: enterprise.email,
       },
     });
 
