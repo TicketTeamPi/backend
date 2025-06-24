@@ -28,6 +28,9 @@ export default class Ticket extends BaseModel {
   declare userId: number
 
   @column()
+  declare responsibleId: number
+
+  @column()
   declare sectorId: number
 
   @column()
@@ -49,6 +52,11 @@ export default class Ticket extends BaseModel {
     foreignKey: 'userId',
   })
   declare user: BelongsTo<typeof User>
+
+  @belongsTo(() => User, {
+    foreignKey: 'responsibleId',
+  })
+  declare responsible: BelongsTo<typeof User>
 
   @belongsTo(() => Sector, {
     foreignKey: 'sectorId',

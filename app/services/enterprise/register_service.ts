@@ -26,12 +26,20 @@ export default class RegisterService {
     return user
   }
 
+  private async createSector(enterprise: Enterprise): Promise<void> {
+    await enterprise.related('sectors').create({
+      name: 'Adm',
+    })
+  }
+
   public async handle(data: RegisterData): Promise<AccessToken> {
     await db.beginGlobalTransaction()
 
     try {
       const enterprise = await this.createEnterprise(data)
       const user = await this.createUser(enterprise, data)
+
+      await this.createSector(enterprise)
 
       await db.commitGlobalTransaction()
 

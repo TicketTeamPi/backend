@@ -35,6 +35,7 @@ export default class AuthController {
     return response.ok({
       name: auth.user?.fullName,
       email: auth.user?.email,
+      isAdmin: auth.user?.isAdmin,
     })
   }
 }

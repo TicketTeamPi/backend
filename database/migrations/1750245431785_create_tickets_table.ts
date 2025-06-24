@@ -9,6 +9,7 @@ export default class extends BaseSchema {
       table.string('status').notNullable()
       table.string('priority').notNullable()
       table.string('description', 1000).notNullable()
+
       table
         .integer('user_id')
         .unsigned()
@@ -16,6 +17,15 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('users')
         .onDelete('CASCADE')
+
+      table
+        .integer('responsible_id')
+        .unsigned()
+        .nullable()
+        .references('id')
+        .inTable('users')
+        .onDelete('SET NULL')
+
       table
         .integer('sector_id')
         .unsigned()
@@ -23,6 +33,7 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('sectors')
         .onDelete('CASCADE')
+
       table
         .integer('enterprise_id')
         .unsigned()
