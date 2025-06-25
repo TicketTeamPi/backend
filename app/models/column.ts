@@ -1,8 +1,9 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
 import Enterprise from './enterprise.js'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import Sector from './sector.js'
+import Ticket from './ticket.js'
 
 export default class Column extends BaseModel {
   @column({ isPrimary: true })
@@ -32,4 +33,9 @@ export default class Column extends BaseModel {
     foreignKey: 'sector_id',
   })
   declare sector: BelongsTo<typeof Sector>
+
+  @hasMany(() => Ticket, {
+    foreignKey: 'column_id',
+  })
+  declare tickets: HasMany<typeof Ticket>
 }

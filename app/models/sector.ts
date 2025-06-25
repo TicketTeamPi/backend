@@ -4,6 +4,7 @@ import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import User from './user.js'
 import Enterprise from './enterprise.js'
 import Ticket from './ticket.js'
+import Column from './column.js'
 
 export default class Sector extends BaseModel {
   @column({ isPrimary: true })
@@ -31,6 +32,11 @@ export default class Sector extends BaseModel {
     foreignKey: 'sector_id',
   })
   declare users: HasMany<typeof User>
+
+  @hasMany(() => Column, {
+    foreignKey: 'sector_id',
+  })
+  declare columns: HasMany<typeof Column>
 
   @belongsTo(() => Enterprise, {
     foreignKey: 'enterprise_id',

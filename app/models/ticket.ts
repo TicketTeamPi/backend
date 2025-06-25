@@ -4,6 +4,7 @@ import Enterprise from './enterprise.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import Sector from './sector.js'
 import User from './user.js'
+import Column from './column.js'
 
 export type TicketStatus = 'open' | 'in_progress' | 'closed'
 export type TicketPriority = 'low' | 'medium' | 'high'
@@ -45,6 +46,9 @@ export default class Ticket extends BaseModel {
   @column()
   declare isActive: boolean
 
+  @column()
+  declare column_id: number
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
@@ -70,4 +74,9 @@ export default class Ticket extends BaseModel {
     foreignKey: 'enterpriseId',
   })
   declare enterprise: BelongsTo<typeof Enterprise>
+
+  @belongsTo(() => Column, {
+    foreignKey: 'column_id',
+  })
+  declare column: BelongsTo<typeof Column>
 }

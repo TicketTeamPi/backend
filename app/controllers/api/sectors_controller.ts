@@ -32,24 +32,20 @@ export default class SectorsController {
         id: sector.id,
         name: sector.name,
         description: sector.description,
+        columns: sector.columns.map((column) => ({
+          id: column.id,
+          name: column.name,
+          tickets: column.tickets.map((ticket) => ({
+            id: ticket.id,
+            title: ticket.title,
+            status: ticket.status,
+            priority: ticket.priority,
+            userId: ticket.userId,
+            responsibleId: ticket?.responsibleId,
+            startedAt: ticket.startedAt,
+          })),
+        })),
       })),
-    })
-  }
-
-  //discutir com rafa se vai ser necessario
-  async show({ auth, params, response }: HttpContext) {
-    const enterpriseId = auth.user!.enterprise_id!
-    const sector = await Sector.query()
-      .where('id', params.id)
-      .where('enterprise_id', enterpriseId)
-      .firstOrFail()
-
-    return response.ok({
-      data: {
-        id: sector.id,
-        name: sector.name,
-        description: sector.description,
-      },
     })
   }
 

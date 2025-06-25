@@ -5,6 +5,7 @@ import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
 const ResponsibleController = () => import('#controllers/api/tickets/responsibles_controller')
 const TicketsController = () => import('#controllers/api/tickets_controller')
+const ColumnsController = () => import('#controllers/api/columns_controller')
 
 router.post('/register', [AuthController, 'register'])
 router.post('/login', [AuthController, 'login'])
@@ -15,7 +16,6 @@ router
     router.get('/me', [AuthController, 'me'])
 
     router.get('/sectors', [SectorsController, 'index'])
-    router.get('/sectors/:id', [SectorsController, 'show'])
 
     router.get('/users', [UsersController, 'index'])
     router.get('/users/:id', [UsersController, 'show'])
@@ -31,6 +31,8 @@ router
     router.put('/tickets/:id/responsible', [ResponsibleController, 'setResponsible'])
     router.put('/tickets/:id/status', [ResponsibleController, 'updateStatus'])
     router.put('/tickets/:id/priority', [ResponsibleController, 'updatePriority'])
+
+    router.post('/columns', [ColumnsController, 'create'])
 
     router
       .group(() => {

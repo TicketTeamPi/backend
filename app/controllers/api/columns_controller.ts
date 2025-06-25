@@ -10,6 +10,7 @@ export default class ColumnsController {
     const column = await Column.create({
       name: data.name,
       enterprise_id: enterpriseId,
+      sector_id: data.sector_id,
     })
 
     return response.created({
