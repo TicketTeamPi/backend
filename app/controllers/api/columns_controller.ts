@@ -20,4 +20,25 @@ export default class ColumnsController {
       },
     })
   }
+
+  async findAllBySectorId({ params, response }: HttpContext) {
+    const sectorId = params.sectorId
+    const columns = await Column.query().where('sector_id', sectorId)
+
+    return response.ok({
+      data: columns.map((column) => ({
+        id: column.id,
+        name: column.name,
+        tickets: column.tickets.map((ticket) => ({
+          id: ticket.id,
+          title: ticket.title,
+          status: ticket.status,
+          priority: ticket.priority,
+          userId: ticket.userId,
+          responsibleId: ticket?.responsibleId,
+          startedAt: ticket.startedAt,
+        })),
+      })),
+    })
+  }
 }

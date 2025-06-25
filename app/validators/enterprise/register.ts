@@ -3,7 +3,9 @@ import { Infer } from '@vinejs/vine/types'
 
 export const registerValidator = vine.compile(
   vine.object({
-    name: vine.string().minLength(3),
+    name: vine.string().minLength(1),
+
+    userName: vine.string().minLength(1),
 
     cnpj: vine
       .string()

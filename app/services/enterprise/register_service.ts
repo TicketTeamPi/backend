@@ -17,7 +17,7 @@ export default class RegisterService {
 
   private async createUser(enterprise: Enterprise, data: RegisterData): Promise<User> {
     const user = await enterprise.related('users').create({
-      fullName: enterprise.name,
+      name: data.userName,
       email: data.email,
       isAdmin: true,
       password: data.password,

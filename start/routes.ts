@@ -33,6 +33,7 @@ router
     router.put('/tickets/:id/priority', [ResponsibleController, 'updatePriority'])
 
     router.post('/columns', [ColumnsController, 'create'])
+    router.get('/sectors/:sectorId', [ColumnsController, 'findAllBySectorId'])
 
     router
       .group(() => {

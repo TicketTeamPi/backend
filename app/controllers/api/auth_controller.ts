@@ -33,7 +33,7 @@ export default class AuthController {
 
   async me({ auth, response }: HttpContext) {
     return response.ok({
-      name: auth.user?.fullName,
+      name: auth.user?.name,
       email: auth.user?.email,
       isAdmin: auth.user?.isAdmin,
     })

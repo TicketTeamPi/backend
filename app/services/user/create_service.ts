@@ -7,7 +7,7 @@ import EmailHelper from '../../helpers/email_helper.js'
 export default class CreateService {
   private async createUser(data: CreateData, enterpriseId: number): Promise<User> {
     return await User.create({
-      fullName: data.name,
+      name: data.name,
       email: data.email,
       isAdmin: data.isAdmin,
       password: data.password,
@@ -17,7 +17,7 @@ export default class CreateService {
   }
 
   private async sendWelcomeEmail(user: User): Promise<void> {
-    const htmlContent = EmailHelper.welcomeEmail(user.fullName!)
+    const htmlContent = EmailHelper.welcomeEmail(user.name!)
 
     await mail.send((message) => {
       message
