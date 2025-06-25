@@ -1,5 +1,5 @@
 export default class EmailHelper {
-  public static welcomeEmail(userName: string, password: string): string {
+  public static welcomeEmail(userName: string): string {
     return `
         <!DOCTYPE html>
         <html>
@@ -24,8 +24,6 @@ export default class EmailHelper {
               <p>Seu cadastro foi realizado com sucesso.</p>
               <p>Aqui estão suas credenciais de acesso:</p>
               <p><strong>Email:</strong> ${userName}</p>
-              <p><strong>Senha temporária:</strong> <span class="password">${password}</span></p>
-              <p>Recomendamos que você altere sua senha após o primeiro login.</p>
             </div>
             <div class="footer">
               <p>Este é um email automático, por favor não responda.</p>

@@ -36,6 +36,7 @@ export default class SectorsController {
     })
   }
 
+  //discutir com rafa se vai ser necessario
   async show({ auth, params, response }: HttpContext) {
     const enterpriseId = auth.user!.enterprise_id!
     const sector = await Sector.query()

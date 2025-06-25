@@ -5,22 +5,19 @@ import mail from '@adonisjs/mail/services/main'
 import EmailHelper from '../../helpers/email_helper.js'
 
 export default class CreateService {
-  private async createUser(
-    data: CreateData,
-    enterpriseId: number,
-    password: string
-  ): Promise<User> {
+  private async createUser(data: CreateData, enterpriseId: number): Promise<User> {
     return await User.create({
       fullName: data.name,
       email: data.email,
       isAdmin: data.isAdmin,
-      password: password,
+      password: data.password,
       enterprise_id: enterpriseId,
+      sector_id: data.sectorId,
     })
   }
 
-  private async sendWelcomeEmail(user: User, password: string): Promise<void> {
-    const htmlContent = EmailHelper.welcomeEmail(user.fullName!, password)
+  private async sendWelcomeEmail(user: User): Promise<void> {
+    const htmlContent = EmailHelper.welcomeEmail(user.fullName!)
 
     await mail.send((message) => {
       message
@@ -35,10 +32,9 @@ export default class CreateService {
     db.beginGlobalTransaction()
 
     try {
-      const password = Math.random().toString(36).slice(-8)
-      const user = await this.createUser(data, enterpriseId, password)
+      const user = await this.createUser(data, enterpriseId)
 
-      await this.sendWelcomeEmail(user, password)
+      await this.sendWelcomeEmail(user)
 
       await db.commitGlobalTransaction()
     } catch (error) {

@@ -42,6 +42,9 @@ export default class Ticket extends BaseModel {
   @column()
   declare endDate: DateTime
 
+  @column()
+  declare isActive: boolean
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

@@ -18,6 +18,9 @@ export default class Sector extends BaseModel {
   @column()
   declare description: string
 
+  @column()
+  declare isActive: boolean
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
