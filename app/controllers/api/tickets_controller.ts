@@ -15,9 +15,10 @@ export default class TicketsController {
       priority: data.priority || 'low',
       userId: auth.user!.id,
       sectorId: data.sectorId,
+      columnId: data.columnId,
       enterpriseId: auth.user!.enterprise_id,
       startedAt: data.startedAt ? DateTime.fromJSDate(data.startedAt) : DateTime.now(),
-      endDate: data.endDate ? DateTime.fromJSDate(data.endDate) : undefined,
+      endDate: data.endDate ? DateTime.fromJSDate(data.endDate) : null,
     })
 
     return response.created({ id: ticket.id })

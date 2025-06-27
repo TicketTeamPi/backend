@@ -17,7 +17,7 @@ export default class UsersController {
     return response.ok({
       data: users.map((user: User) => ({
         id: user.id,
-        name: user.fullName,
+        name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
       })),
@@ -34,7 +34,7 @@ export default class UsersController {
     return response.ok({
       data: {
         id: user.id,
-        name: user.fullName,
+        name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
       },

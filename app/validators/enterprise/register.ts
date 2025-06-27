@@ -25,7 +25,7 @@ export const registerValidator = vine.compile(
         return !exists
       }),
 
-    password: vine.string().minLength(6),
+    password: vine.string().minLength(1),
   })
 )
 

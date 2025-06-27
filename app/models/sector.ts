@@ -29,12 +29,12 @@ export default class Sector extends BaseModel {
   declare updatedAt: DateTime
 
   @hasMany(() => User, {
-    foreignKey: 'sector_id',
+    foreignKey: 'sectorId',
   })
   declare users: HasMany<typeof User>
 
   @hasMany(() => Column, {
-    foreignKey: 'sector_id',
+    foreignKey: 'sectorId',
   })
   declare columns: HasMany<typeof Column>
 

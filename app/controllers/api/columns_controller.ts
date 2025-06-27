@@ -9,8 +9,8 @@ export default class ColumnsController {
 
     const column = await Column.create({
       name: data.name,
-      enterprise_id: enterpriseId,
-      sector_id: data.sector_id,
+      enterpriseId: enterpriseId,
+      sectorId: data.sectorId,
     })
 
     return response.created({
@@ -23,7 +23,20 @@ export default class ColumnsController {
 
   async findAllBySectorId({ params, response }: HttpContext) {
     const sectorId = params.sectorId
-    const columns = await Column.query().where('sector_id', sectorId)
+    const columns = await Column.query()
+      .select(['id', 'name'])
+      .where('sector_id', sectorId)
+      .preload('tickets', (query) => {
+        query.select([
+          'id',
+          'title',
+          'status',
+          'priority',
+          'user_id',
+          'responsible_id',
+          'started_at',
+        ])
+      })
 
     return response.ok({
       data: columns.map((column) => ({

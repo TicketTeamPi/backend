@@ -13,10 +13,10 @@ export default class Column extends BaseModel {
   declare name: string
 
   @column()
-  declare enterprise_id: number
+  declare enterpriseId: number
 
   @column()
-  declare sector_id: number
+  declare sectorId: number
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -35,7 +35,7 @@ export default class Column extends BaseModel {
   declare sector: BelongsTo<typeof Sector>
 
   @hasMany(() => Ticket, {
-    foreignKey: 'column_id',
+    foreignKey: 'columnId',
   })
   declare tickets: HasMany<typeof Ticket>
 }

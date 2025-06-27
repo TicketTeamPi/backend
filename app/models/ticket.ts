@@ -37,17 +37,17 @@ export default class Ticket extends BaseModel {
   @column()
   declare enterpriseId: number
 
-  @column()
+  @column.dateTime()
   declare startedAt: DateTime
 
-  @column()
-  declare endDate: DateTime
+  @column.dateTime()
+  declare endDate: DateTime | null
 
   @column()
   declare isActive: boolean
 
   @column()
-  declare column_id: number
+  declare columnId: number
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -56,22 +56,22 @@ export default class Ticket extends BaseModel {
   declare updatedAt: DateTime
 
   @belongsTo(() => User, {
-    foreignKey: 'userId',
+    foreignKey: 'user_id',
   })
   declare user: BelongsTo<typeof User>
 
   @belongsTo(() => User, {
-    foreignKey: 'responsibleId',
+    foreignKey: 'responsible_id',
   })
   declare responsible: BelongsTo<typeof User>
 
   @belongsTo(() => Sector, {
-    foreignKey: 'sectorId',
+    foreignKey: 'sector_id',
   })
   declare sector: BelongsTo<typeof Sector>
 
   @belongsTo(() => Enterprise, {
-    foreignKey: 'enterpriseId',
+    foreignKey: 'enterprise_id',
   })
   declare enterprise: BelongsTo<typeof Enterprise>
 
