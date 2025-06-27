@@ -25,7 +25,7 @@ export default class Column extends BaseModel {
   declare updatedAt: DateTime
 
   @belongsTo(() => Enterprise, {
-    foreignKey: 'enterprise_id',
+    foreignKey: 'enterpriseId',
   })
   declare enterprise: BelongsTo<typeof Enterprise>
 

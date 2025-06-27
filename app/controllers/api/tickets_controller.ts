@@ -11,41 +11,16 @@ export default class TicketsController {
     const ticket = await Ticket.create({
       title: data.title,
       description: data.description,
-      status: data.status || 'open',
       priority: data.priority || 'low',
       userId: auth.user!.id,
       sectorId: data.sectorId,
       columnId: data.columnId,
-      enterpriseId: auth.user!.enterprise_id,
+      enterpriseId: auth.user!.enterpriseId,
       startedAt: data.startedAt ? DateTime.fromJSDate(data.startedAt) : DateTime.now(),
       endDate: data.endDate ? DateTime.fromJSDate(data.endDate) : null,
     })
 
     return response.created({ id: ticket.id })
-  }
-
-  async index({ auth, response, request }: HttpContext) {
-    const status = request.input('status') ?? null
-    const priority = request.input('priority') ?? null
-    const sectorId = request.input('sectorId') ?? null
-
-    const query = Ticket.query().where('enterprise_id', auth.user!.enterprise_id)
-
-    if (status) {
-      query.where('status', status)
-    }
-
-    if (priority) {
-      query.where('priority', priority)
-    }
-
-    if (sectorId) {
-      query.where('sector_id', sectorId)
-    }
-
-    const tickets = await query
-
-    return response.ok(tickets)
   }
 
   async show({ params, response }: HttpContext) {
@@ -76,7 +51,7 @@ export default class TicketsController {
   async destroy({ auth, params, response }: HttpContext) {
     const ticket = await Ticket.query()
       .where('id', params.id)
-      .where('enterprise_id', auth.user!.enterprise_id)
+      .where('enterpriseId', auth.user!.enterpriseId)
       .where('user_id', auth.user!.id)
       .firstOrFail()
 

@@ -5,7 +5,7 @@ import Column from '#models/column'
 export default class ColumnsController {
   async create({ auth, request, response }: HttpContext) {
     const data = await request.validateUsing(columnValidator)
-    const enterpriseId = auth.user!.enterprise_id!
+    const enterpriseId = auth.user!.enterpriseId!
 
     const column = await Column.create({
       name: data.name,
@@ -27,15 +27,7 @@ export default class ColumnsController {
       .select(['id', 'name'])
       .where('sector_id', sectorId)
       .preload('tickets', (query) => {
-        query.select([
-          'id',
-          'title',
-          'status',
-          'priority',
-          'user_id',
-          'responsible_id',
-          'started_at',
-        ])
+        query.select(['id', 'title', 'priority', 'user_id', 'responsible_id', 'started_at'])
       })
 
     return response.ok({
@@ -45,7 +37,6 @@ export default class ColumnsController {
         tickets: column.tickets.map((ticket) => ({
           id: ticket.id,
           title: ticket.title,
-          status: ticket.status,
           priority: ticket.priority,
           userId: ticket.userId,
           responsibleId: ticket?.responsibleId,

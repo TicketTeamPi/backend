@@ -21,7 +21,6 @@ router
     router.get('/users/:id', [UsersController, 'show'])
     router.put('/users/:id/password', [UsersController, 'updatePassword'])
 
-    router.get('/tickets', [TicketsController, 'index'])
     router.get('/tickets/:id', [TicketsController, 'show'])
     router.post('/tickets', [TicketsController, 'create'])
     router.patch('/tickets/:id', [TicketsController, 'patch'])
@@ -29,7 +28,6 @@ router
 
     router.get('/tickets/:id/responsible', [ResponsibleController, 'index'])
     router.put('/tickets/:id/responsible', [ResponsibleController, 'setResponsible'])
-    router.put('/tickets/:id/status', [ResponsibleController, 'updateStatus'])
     router.put('/tickets/:id/priority', [ResponsibleController, 'updatePriority'])
 
     router.post('/columns', [ColumnsController, 'create'])

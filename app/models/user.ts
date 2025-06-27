@@ -19,7 +19,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   declare id: number
 
   @column()
-  declare enterprise_id: number
+  declare enterpriseId: number
 
   @column()
   declare sector_id: number
@@ -48,7 +48,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   static accessTokens = DbAccessTokensProvider.forModel(User)
 
   @belongsTo(() => Enterprise, {
-    foreignKey: 'enterprise_id',
+    foreignKey: 'enterpriseId',
   })
   declare enterprise: BelongsTo<typeof Enterprise>
 

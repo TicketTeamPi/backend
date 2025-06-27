@@ -6,7 +6,7 @@ export const createValidator = vine.compile(
     name: vine.string().minLength(3).maxLength(100),
     email: vine.string().maxLength(255),
     password: vine.string(),
-    isAdmin: vine.boolean(),
+    isAdmin: vine.boolean().optional(),
     sectorId: vine.number(),
   })
 )

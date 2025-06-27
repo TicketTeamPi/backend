@@ -6,7 +6,6 @@ import Sector from './sector.js'
 import User from './user.js'
 import Column from './column.js'
 
-export type TicketStatus = 'open' | 'in_progress' | 'closed'
 export type TicketPriority = 'low' | 'medium' | 'high'
 
 export default class Ticket extends BaseModel {
@@ -18,9 +17,6 @@ export default class Ticket extends BaseModel {
 
   @column()
   declare description: string
-
-  @column()
-  declare status: TicketStatus
 
   @column()
   declare priority: TicketPriority
@@ -71,7 +67,7 @@ export default class Ticket extends BaseModel {
   declare sector: BelongsTo<typeof Sector>
 
   @belongsTo(() => Enterprise, {
-    foreignKey: 'enterprise_id',
+    foreignKey: 'enterpriseId',
   })
   declare enterprise: BelongsTo<typeof Enterprise>
 

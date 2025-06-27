@@ -10,27 +10,12 @@ export default class ResponsibleController {
   async setResponsible({ auth, params, request, response }: HttpContext) {
     const ticket = await Ticket.query()
       .where('id', params.id)
-      .where('enterprise_id', auth.user!.enterprise_id)
+      .where('enterpriseId', auth.user!.enterpriseId)
       .firstOrFail()
 
-    const responsibleId = request.input('responsibleId') ?? auth.user!.id
+    const responsibleId = request.input('responsibleId')
 
     ticket.responsibleId = responsibleId
-
-    await ticket.save()
-
-    return response.noContent()
-  }
-
-  async updateStatus({ auth, params, request, response }: HttpContext) {
-    const ticket = await Ticket.query()
-      .where('id', params.id)
-      .where('enterprise_id', auth.user!.enterprise_id)
-      .firstOrFail()
-
-    const status = request.input('status')
-
-    ticket.status = status
 
     await ticket.save()
 
@@ -40,7 +25,7 @@ export default class ResponsibleController {
   async updatePriority({ auth, params, request, response }: HttpContext) {
     const ticket = await Ticket.query()
       .where('id', params.id)
-      .where('enterprise_id', auth.user!.enterprise_id)
+      .where('enterpriseId', auth.user!.enterpriseId)
       .firstOrFail()
 
     const priority = request.input('priority')

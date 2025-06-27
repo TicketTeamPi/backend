@@ -10,9 +10,9 @@ export default class UsersController {
   constructor(private createService: CreateService) {}
 
   async index({ auth, response }: HttpContext) {
-    const enterpriseId = auth.user!.enterprise_id!
+    const enterpriseId = auth.user!.enterpriseId!
 
-    const users = await User.query().where('enterprise_id', enterpriseId)
+    const users = await User.query().where('enterpriseId', enterpriseId)
 
     return response.ok({
       data: users.map((user: User) => ({
@@ -25,10 +25,10 @@ export default class UsersController {
   }
 
   async show({ auth, params, response }: HttpContext) {
-    const enterpriseId = auth.user!.enterprise_id!
+    const enterpriseId = auth.user!.enterpriseId!
     const user = await User.query()
       .where('id', params.id)
-      .where('enterprise_id', enterpriseId)
+      .where('enterpriseId', enterpriseId)
       .firstOrFail()
 
     return response.ok({
@@ -44,7 +44,9 @@ export default class UsersController {
   async create({ auth, request, response }: HttpContext) {
     const data = await request.validateUsing(createValidator)
 
-    const enterpriseId = auth.user?.enterprise_id!
+    const enterpriseId = auth.user?.enterpriseId!
+
+    data.isAdmin = false
 
     await this.createService.handle(data, enterpriseId)
 
@@ -52,10 +54,10 @@ export default class UsersController {
   }
 
   async destroy({ auth, params, response }: HttpContext) {
-    const enterpriseId = auth.user!.enterprise_id!
+    const enterpriseId = auth.user!.enterpriseId!
     const user = await User.query()
       .where('id', params.id)
-      .where('enterprise_id', enterpriseId)
+      .where('enterpriseId', enterpriseId)
       .firstOrFail()
 
     if (user.id === auth.user!.id) {
@@ -83,14 +85,14 @@ export default class UsersController {
   }
 
   async linkToSector({ auth, params, request, response }: HttpContext) {
-    const enterpriseId = auth.user!.enterprise_id!
+    const enterpriseId = auth.user!.enterpriseId!
     const user = await User.query()
       .where('id', params.id)
-      .where('enterprise_id', enterpriseId)
+      .where('enterpriseId', enterpriseId)
       .firstOrFail()
     const sector = await Sector.query()
       .where('id', request.input('sectorId'))
-      .where('enterprise_id', enterpriseId)
+      .where('enterpriseId', enterpriseId)
       .firstOrFail()
 
     await user.related('sector').associate(sector)

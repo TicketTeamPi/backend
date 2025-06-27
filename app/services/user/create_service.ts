@@ -11,7 +11,7 @@ export default class CreateService {
       email: data.email,
       isAdmin: data.isAdmin,
       password: data.password,
-      enterprise_id: enterpriseId,
+      enterpriseId: enterpriseId,
       sector_id: data.sectorId,
     })
   }
@@ -34,7 +34,7 @@ export default class CreateService {
     try {
       const user = await this.createUser(data, enterpriseId)
 
-      await this.sendWelcomeEmail(user)
+      // await this.sendWelcomeEmail(user)
 
       await db.commitGlobalTransaction()
     } catch (error) {

@@ -5,12 +5,12 @@ import type { HttpContext } from '@adonisjs/core/http'
 export default class SectorsController {
   async create({ auth, request, response }: HttpContext) {
     const data = await request.validateUsing(sectorValidator)
-    const enterpriseId = auth.user!.enterprise_id!
+    const enterpriseId = auth.user!.enterpriseId!
 
     const sector = await Sector.create({
       name: data.name,
       description: data.description,
-      enterprise_id: enterpriseId,
+      enterpriseId: enterpriseId,
     })
 
     return response.created({
@@ -23,9 +23,9 @@ export default class SectorsController {
   }
 
   async index({ auth, response }: HttpContext) {
-    const enterpriseId = auth.user!.enterprise_id!
+    const enterpriseId = auth.user!.enterpriseId!
 
-    const sectors = await Sector.query().where('enterprise_id', enterpriseId)
+    const sectors = await Sector.query().where('enterpriseId', enterpriseId)
 
     return response.ok({
       data: sectors.map((sector) => ({
@@ -38,7 +38,6 @@ export default class SectorsController {
           tickets: column.tickets.map((ticket) => ({
             id: ticket.id,
             title: ticket.title,
-            status: ticket.status,
             priority: ticket.priority,
             userId: ticket.userId,
             responsibleId: ticket?.responsibleId,
@@ -51,10 +50,10 @@ export default class SectorsController {
 
   async update({ auth, params, request, response }: HttpContext) {
     const data = await request.validateUsing(sectorValidator)
-    const enterpriseId = auth.user!.enterprise_id!
+    const enterpriseId = auth.user!.enterpriseId!
     const sector = await Sector.query()
       .where('id', params.id)
-      .where('enterprise_id', enterpriseId)
+      .where('enterpriseId', enterpriseId)
       .firstOrFail()
 
     await sector
@@ -74,10 +73,10 @@ export default class SectorsController {
   }
 
   async destroy({ auth, params, response }: HttpContext) {
-    const enterpriseId = auth.user!.enterprise_id!
+    const enterpriseId = auth.user!.enterpriseId!
     const sector = await Sector.query()
       .where('id', params.id)
-      .where('enterprise_id', enterpriseId)
+      .where('enterpriseId', enterpriseId)
       .firstOrFail()
 
     await sector.delete()

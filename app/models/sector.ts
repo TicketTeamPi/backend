@@ -11,7 +11,7 @@ export default class Sector extends BaseModel {
   declare id: number
 
   @column()
-  declare enterprise_id: number
+  declare enterpriseId: number
 
   @column()
   declare name: string
@@ -39,7 +39,7 @@ export default class Sector extends BaseModel {
   declare columns: HasMany<typeof Column>
 
   @belongsTo(() => Enterprise, {
-    foreignKey: 'enterprise_id',
+    foreignKey: 'enterpriseId',
   })
   declare enterprise: BelongsTo<typeof Enterprise>
 
