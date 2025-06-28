@@ -21,19 +21,4 @@ export default class ResponsibleController {
 
     return response.noContent()
   }
-
-  async updatePriority({ auth, params, request, response }: HttpContext) {
-    const ticket = await Ticket.query()
-      .where('id', params.id)
-      .where('enterpriseId', auth.user!.enterpriseId)
-      .firstOrFail()
-
-    const priority = request.input('priority')
-
-    ticket.priority = priority
-
-    await ticket.save()
-
-    return response.noContent()
-  }
 }

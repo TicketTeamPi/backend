@@ -1,0 +1,15 @@
+import type { HttpContext } from '@adonisjs/core/http'
+import type { NextFn } from '@adonisjs/core/types/http'
+
+export default class AdminSectorMiddleware {
+  async handle({ auth, params, response }: HttpContext, next: NextFn) {
+    if (
+      (auth.user!.isAdmin && auth.user?.sector_id === params.sectorId) ||
+      auth.user?.sector_id === 1
+    ) {
+      return await next()
+    }
+    response.status(500).send('Unauthorized')
+    return
+  }
+}

@@ -42,6 +42,7 @@ router.use([
  * the routes or the routes group.
  */
 export const middleware = router.named({
+  adminSector: () => import('#middleware/admin_sector_middleware'),
   auth: () => import('#middleware/auth_middleware'),
   adminOnly: () => import('#middleware/admin_only_middleware'),
 })

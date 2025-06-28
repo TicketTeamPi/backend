@@ -1,5 +1,6 @@
 import Ticket from '#models/ticket'
 import { createValidator } from '#validators/ticket/create'
+import { otherSectorValidator } from '#validators/ticket/other_sector'
 import { patchValidator } from '#validators/ticket/patch'
 import type { HttpContext } from '@adonisjs/core/http'
 import { DateTime } from 'luxon'
@@ -41,11 +42,29 @@ export default class TicketsController {
     ticket.merge({
       title: data.title,
       description: data.description,
+      priority: data.priority,
     })
 
     await ticket.save()
 
     return response.ok({ id: ticket.id })
+  }
+
+  async moveToOtherSector({ auth, request, response }: HttpContext) {
+    const data = await request.validateUsing(otherSectorValidator)
+
+    const ticket = await Ticket.query()
+      .where('id', data.ticketId)
+      .where('enterpriseId', auth.user!.enterpriseId)
+      .firstOrFail()
+
+    ticket.merge({
+      sectorId: data.sectorChangeId,
+      columnId: data.columnId,
+    })
+    await ticket.save()
+
+    return response.noContent()
   }
 
   async destroy({ auth, params, response }: HttpContext) {

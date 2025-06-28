@@ -15,21 +15,28 @@ export default class RegisterService {
     return enterprise
   }
 
-  private async createUser(enterprise: Enterprise, data: RegisterData): Promise<User> {
+  private async createUser(
+    enterprise: Enterprise,
+    data: RegisterData,
+    sectorId: number
+  ): Promise<User> {
     const user = await enterprise.related('users').create({
       name: data.userName,
       email: data.email,
       isAdmin: true,
       password: data.password,
+      sector_id: sectorId,
     })
 
     return user
   }
 
-  private async createSector(enterprise: Enterprise): Promise<void> {
-    await enterprise.related('sectors').create({
+  private async createSector(enterprise: Enterprise): Promise<number> {
+    const sector = await enterprise.related('sectors').create({
       name: 'Adm',
     })
+
+    return sector.id
   }
 
   public async handle(data: RegisterData): Promise<AccessToken> {
@@ -37,9 +44,10 @@ export default class RegisterService {
 
     try {
       const enterprise = await this.createEnterprise(data)
-      const user = await this.createUser(enterprise, data)
 
-      await this.createSector(enterprise)
+      const sectorId = await this.createSector(enterprise)
+
+      const user = await this.createUser(enterprise, data, sectorId)
 
       await db.commitGlobalTransaction()
 

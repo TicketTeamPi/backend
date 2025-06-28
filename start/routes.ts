@@ -28,7 +28,6 @@ router
 
     router.get('/tickets/:id/responsible', [ResponsibleController, 'index'])
     router.put('/tickets/:id/responsible', [ResponsibleController, 'setResponsible'])
-    router.put('/tickets/:id/priority', [ResponsibleController, 'updatePriority'])
 
     router.post('/columns', [ColumnsController, 'create'])
     router.get('/columns/:sectorId', [ColumnsController, 'findAllBySectorId'])
@@ -44,5 +43,10 @@ router
         router.delete('/users/:id', [UsersController, 'destroy'])
       })
       .use(middleware.adminOnly())
+    router
+      .group(() => {
+        router.patch('/tickets/:sectorId/move-sector', [TicketsController, 'moveToOtherSector'])
+      })
+      .use(middleware.adminSector())
   })
   .use(middleware.auth())
