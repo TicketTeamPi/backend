@@ -15,32 +15,33 @@ router
     router.delete('/logout', [AuthController, 'logout'])
     router.get('/me', [AuthController, 'me'])
 
-    router.get('/sectors', [SectorsController, 'index'])
+    router.get('/sectors', [SectorsController, 'getAll'])
 
     router.get('/users', [UsersController, 'index'])
     router.get('/users/:id', [UsersController, 'show'])
     router.put('/users/:id/password', [UsersController, 'updatePassword'])
 
-    router.get('/tickets/:id', [TicketsController, 'show'])
+    router.get('/tickets/:id', [TicketsController, 'getByIdAndIsActive'])
     router.post('/tickets', [TicketsController, 'create'])
-    router.patch('/tickets/:id', [TicketsController, 'patch'])
-    router.delete('/tickets/:id', [TicketsController, 'destroy'])
+    router.patch('/tickets/update-ticket/:id', [TicketsController, 'updateTicket'])
+    router.patch('/tickets/change-status/:id', [TicketsController, 'changeStatus'])
 
     router.get('/tickets/:id/responsible', [ResponsibleController, 'index'])
     router.put('/tickets/:id/responsible', [ResponsibleController, 'setResponsible'])
 
     router.post('/columns', [ColumnsController, 'create'])
-    router.get('/columns/:sectorId', [ColumnsController, 'findAllBySectorId'])
+    router.get('/columns', [ColumnsController, 'findAll'])
+    router.put('/columns/reorganize', [ColumnsController, 'repositioningTicket'])
+    router.put('/columns/reorganizeColumn', [ColumnsController, 'moveColumn'])
 
     router
       .group(() => {
         router.post('/sectors', [SectorsController, 'create'])
         router.put('/sectors/:id', [SectorsController, 'update'])
-        router.delete('/sectors/:id', [SectorsController, 'destroy'])
+        router.delete('/sectors/change-status/:id', [SectorsController, 'changeStatus'])
 
         router.post('/users', [UsersController, 'create'])
-        router.put('/users/:id/sector', [UsersController, 'linkToSector'])
-        router.delete('/users/:id', [UsersController, 'destroy'])
+        router.patch('/users/change-status/:id', [UsersController, 'changeStatus'])
       })
       .use(middleware.adminOnly())
     router

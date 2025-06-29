@@ -1,17 +1,13 @@
-import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
-import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
+import { BaseModel, beforeCreate, column, hasMany } from '@adonisjs/lucid/orm'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
 import User from './user.js'
-import Enterprise from './enterprise.js'
 import Ticket from './ticket.js'
 import Column from './column.js'
+import { randomUUID } from 'node:crypto'
 
 export default class Sector extends BaseModel {
   @column({ isPrimary: true })
-  declare id: number
-
-  @column()
-  declare enterpriseId: number
+  declare id: string
 
   @column()
   declare name: string
@@ -22,11 +18,8 @@ export default class Sector extends BaseModel {
   @column()
   declare isActive: boolean
 
-  @column.dateTime({ autoCreate: true })
-  declare createdAt: DateTime
-
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
+  @column()
+  declare color: string
 
   @hasMany(() => User, {
     foreignKey: 'sectorId',
@@ -38,13 +31,15 @@ export default class Sector extends BaseModel {
   })
   declare columns: HasMany<typeof Column>
 
-  @belongsTo(() => Enterprise, {
-    foreignKey: 'enterpriseId',
-  })
-  declare enterprise: BelongsTo<typeof Enterprise>
-
   @hasMany(() => Ticket, {
     foreignKey: 'sectorId',
   })
   declare tickets: HasMany<typeof Ticket>
+
+  @beforeCreate()
+  static assignUuid(sector: Sector) {
+    if (!sector.id) {
+      sector.id = randomUUID()
+    }
+  }
 }

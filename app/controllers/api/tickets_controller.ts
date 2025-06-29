@@ -3,7 +3,6 @@ import { createValidator } from '#validators/ticket/create'
 import { otherSectorValidator } from '#validators/ticket/other_sector'
 import { patchValidator } from '#validators/ticket/patch'
 import type { HttpContext } from '@adonisjs/core/http'
-import { DateTime } from 'luxon'
 
 export default class TicketsController {
   async create({ auth, request, response }: HttpContext) {
@@ -12,37 +11,35 @@ export default class TicketsController {
     const ticket = await Ticket.create({
       title: data.title,
       description: data.description,
-      priority: data.priority || 'low',
-      userId: auth.user!.id,
+      createdBy: auth.user!.id,
       sectorId: data.sectorId,
       columnId: data.columnId,
-      enterpriseId: auth.user!.enterpriseId,
-      startedAt: data.startedAt ? DateTime.fromJSDate(data.startedAt) : DateTime.now(),
-      endDate: data.endDate ? DateTime.fromJSDate(data.endDate) : null,
+      position: data.position,
+      enterpriseId: auth!.user!.enterpriseId,
     })
 
-    return response.created({ id: ticket.id })
+    return response.created({ ticket })
   }
 
-  async show({ params, response }: HttpContext) {
-    const ticket = await Ticket.findOrFail(params.id)
+  async getByIdAndIsActive({ params, response }: HttpContext) {
+    const ticket = await Ticket.query().where('id', params.id).where('isActive', true).firstOrFail()
 
     return response.ok(ticket)
   }
 
-  async patch({ auth, params, request, response }: HttpContext) {
+  async updateTicket({ auth, params, request, response }: HttpContext) {
     const data = await request.validateUsing(patchValidator)
 
-    const ticket = await Ticket.findOrFail(params.id)
+    const ticket = await Ticket.query().where('id', params.id).where('isActive', true).firstOrFail()
 
-    if (ticket.userId !== auth.user!.id) {
+    if (ticket.createdBy !== auth.user!.id) {
       return response.forbidden('You are not allowed to update this ticket')
     }
 
     ticket.merge({
-      title: data.title,
-      description: data.description,
-      priority: data.priority,
+      title: data!.title,
+      description: data!.description,
+      priority: data!.priority,
     })
 
     await ticket.save()
@@ -67,14 +64,15 @@ export default class TicketsController {
     return response.noContent()
   }
 
-  async destroy({ auth, params, response }: HttpContext) {
+  async changeStatus({ auth, params, response }: HttpContext) {
     const ticket = await Ticket.query()
       .where('id', params.id)
       .where('enterpriseId', auth.user!.enterpriseId)
-      .where('user_id', auth.user!.id)
       .firstOrFail()
 
-    await ticket.delete()
+    ticket.isActive = !ticket.isActive
+
+    await ticket.save()
 
     return response.noContent()
   }

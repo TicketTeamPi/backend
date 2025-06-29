@@ -1,16 +1,17 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, belongsTo, column } from '@adonisjs/lucid/orm'
 import Enterprise from './enterprise.js'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import Sector from './sector.js'
 import User from './user.js'
 import Column from './column.js'
+import { randomUUID } from 'node:crypto'
 
 export type TicketPriority = 'low' | 'medium' | 'high'
 
 export default class Ticket extends BaseModel {
   @column({ isPrimary: true })
-  declare id: number
+  declare id: string
 
   @column()
   declare title: string
@@ -22,37 +23,34 @@ export default class Ticket extends BaseModel {
   declare priority: TicketPriority
 
   @column()
-  declare userId: number
+  declare createdBy: string
 
   @column()
-  declare responsibleId: number
+  declare responsibleId: string
 
   @column()
-  declare sectorId: number
+  declare sectorId: string
 
   @column()
-  declare enterpriseId: number
-
-  @column.dateTime()
-  declare startedAt: DateTime
-
-  @column.dateTime()
-  declare endDate: DateTime | null
+  declare enterpriseId: string
 
   @column()
   declare isActive: boolean
 
   @column()
-  declare columnId: number
+  declare columnId: string
+
+  @column()
+  declare position: number
+
+  @column.dateTime()
+  declare eta: DateTime
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime
-
   @belongsTo(() => User, {
-    foreignKey: 'user_id',
+    foreignKey: 'created_by',
   })
   declare user: BelongsTo<typeof User>
 
@@ -62,7 +60,7 @@ export default class Ticket extends BaseModel {
   declare responsible: BelongsTo<typeof User>
 
   @belongsTo(() => Sector, {
-    foreignKey: 'sector_id',
+    foreignKey: 'sectorId',
   })
   declare sector: BelongsTo<typeof Sector>
 
@@ -72,7 +70,12 @@ export default class Ticket extends BaseModel {
   declare enterprise: BelongsTo<typeof Enterprise>
 
   @belongsTo(() => Column, {
-    foreignKey: 'column_id',
+    foreignKey: 'columnId',
   })
   declare column: BelongsTo<typeof Column>
+
+  @beforeCreate()
+  static assignUuid(ticket: Ticket) {
+    ticket.id = randomUUID()
+  }
 }

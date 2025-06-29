@@ -1,4 +1,5 @@
 import Sector from '#models/sector'
+import SectorEnterprise from '#models/sector_enterprise'
 import { sectorValidator } from '#validators/sector/sector'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -7,9 +8,17 @@ export default class SectorsController {
     const data = await request.validateUsing(sectorValidator)
     const enterpriseId = auth.user!.enterpriseId!
 
-    const sector = await Sector.create({
-      name: data.name,
-      description: data.description,
+    var sector = await Sector.findBy('name', data.name)
+    if (!sector) {
+      sector = await Sector.create({
+        name: data.name,
+        description: data.description,
+        color: data.color ?? '#1D1D17',
+      })
+    }
+
+    await SectorEnterprise.create({
+      sectorId: sector.id,
       enterpriseId: enterpriseId,
     })
 
@@ -18,30 +27,38 @@ export default class SectorsController {
         id: sector.id,
         name: sector.name,
         description: sector.description,
+        color: sector.color,
       },
     })
   }
 
-  async index({ auth, response }: HttpContext) {
+  async getAll({ auth, response }: HttpContext) {
     const enterpriseId = auth.user!.enterpriseId!
 
-    const sectors = await Sector.query().where('enterpriseId', enterpriseId)
+    const sectorsEnterprise = await SectorEnterprise.query()
+      .where('enterpriseId', enterpriseId)
+      .preload('sector', (query) => {
+        query.preload('columns', (queryCol) => {
+          queryCol.preload('tickets', (queryTick) => {
+            queryTick.where('isActive', true)
+          })
+        })
+      })
 
     return response.ok({
-      data: sectors.map((sector) => ({
-        id: sector.id,
-        name: sector.name,
-        description: sector.description,
-        columns: sector.columns.map((column) => ({
+      data: sectorsEnterprise.map((sectorEnterprise) => ({
+        id: sectorEnterprise.sector.id,
+        name: sectorEnterprise.sector.name,
+        description: sectorEnterprise.sector.description,
+        columns: sectorEnterprise.sector.columns.map((column) => ({
           id: column.id,
           name: column.name,
           tickets: column.tickets.map((ticket) => ({
             id: ticket.id,
             title: ticket.title,
             priority: ticket.priority,
-            userId: ticket.userId,
+            userId: ticket.createdBy,
             responsibleId: ticket?.responsibleId,
-            startedAt: ticket.startedAt,
           })),
         })),
       })),
@@ -60,6 +77,7 @@ export default class SectorsController {
       .merge({
         name: data.name,
         description: data.description,
+        color: data.color,
       })
       .save()
 
@@ -68,18 +86,20 @@ export default class SectorsController {
         id: sector.id,
         name: sector.name,
         description: sector.description,
+        color: sector.color,
       },
     })
   }
 
-  async destroy({ auth, params, response }: HttpContext) {
+  async changeStatus({ auth, params, response }: HttpContext) {
     const enterpriseId = auth.user!.enterpriseId!
     const sector = await Sector.query()
       .where('id', params.id)
       .where('enterpriseId', enterpriseId)
       .firstOrFail()
 
-    await sector.delete()
+    sector.isActive = !sector.isActive
+    await sector.save()
 
     return response.noContent()
   }

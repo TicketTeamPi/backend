@@ -5,7 +5,7 @@ export default class AdminSectorMiddleware {
   async handle({ auth, params, response }: HttpContext, next: NextFn) {
     if (
       (auth.user!.isAdmin && auth.user?.sector_id === params.sectorId) ||
-      auth.user?.sector_id === 1
+      auth.user?.sector_id === process.env.IDSECTORDEFAULT
     ) {
       return await next()
     }

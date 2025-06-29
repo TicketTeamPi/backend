@@ -5,11 +5,11 @@ import mail from '@adonisjs/mail/services/main'
 import EmailHelper from '../../helpers/email_helper.js'
 
 export default class CreateService {
-  private async createUser(data: CreateData, enterpriseId: number): Promise<User> {
+  private async createUser(data: CreateData, enterpriseId: string): Promise<User> {
     return await User.create({
       name: data.name,
       email: data.email,
-      isAdmin: data.isAdmin,
+      isAdmin: data.isAdmin ?? false,
       password: data.password,
       enterpriseId: enterpriseId,
       sector_id: data.sectorId,
@@ -28,7 +28,7 @@ export default class CreateService {
     })
   }
 
-  public async handle(data: CreateData, enterpriseId: number): Promise<void> {
+  public async handle(data: CreateData, enterpriseId: string): Promise<void> {
     db.beginGlobalTransaction()
 
     try {

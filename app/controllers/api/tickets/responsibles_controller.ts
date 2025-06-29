@@ -3,8 +3,27 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ResponsibleController {
   async index({ auth, response }: HttpContext) {
-    const tickets = await Ticket.query().where('responsible_id', auth.user!.id)
-    return response.ok(tickets)
+    const tickets = await Ticket.query()
+      .where('responsible_id', auth.user!.id)
+      .preload('column')
+      .preload('sector')
+
+    return response.ok({
+      data: tickets.map((column) => ({
+        id: column.column.id,
+        name: column.column.name,
+        tickets: {
+          id: column.id,
+          title: column.title,
+          priority: column.priority,
+          userId: column.createdBy,
+          sector: {
+            name: column.sector.name,
+            color: column.sector.color,
+          },
+        },
+      })),
+    })
   }
 
   async setResponsible({ auth, params, request, response }: HttpContext) {
@@ -13,7 +32,7 @@ export default class ResponsibleController {
       .where('enterpriseId', auth.user!.enterpriseId)
       .firstOrFail()
 
-    const responsibleId = request.input('responsibleId')
+    const responsibleId = request.input('responsibleId') ?? auth.user!.id
 
     ticket.responsibleId = responsibleId
 

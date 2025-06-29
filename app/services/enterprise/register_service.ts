@@ -1,4 +1,5 @@
 import Enterprise from '#models/enterprise'
+import SectorEnterprise from '#models/sector_enterprise'
 import User from '#models/user'
 import { RegisterData } from '#validators/enterprise/register'
 import { AccessToken } from '@adonisjs/auth/access_tokens'
@@ -9,34 +10,28 @@ export default class RegisterService {
     const enterprise = await Enterprise.create({
       name: data.name,
       cnpj: data.cnpj,
-      phone: data.phone,
     })
 
     return enterprise
   }
 
-  private async createUser(
-    enterprise: Enterprise,
-    data: RegisterData,
-    sectorId: number
-  ): Promise<User> {
+  private async createUser(enterprise: Enterprise, data: RegisterData): Promise<User> {
     const user = await enterprise.related('users').create({
       name: data.userName,
       email: data.email,
       isAdmin: true,
       password: data.password,
-      sector_id: sectorId,
+      sector_id: process.env.IDSECTORDEFAULT,
     })
 
     return user
   }
 
-  private async createSector(enterprise: Enterprise): Promise<number> {
-    const sector = await enterprise.related('sectors').create({
-      name: 'Adm',
+  private async createSectorEnterprise(enterprise: Enterprise): Promise<void> {
+    await SectorEnterprise.create({
+      sectorId: process.env.IDSECTORDEFAULT,
+      enterpriseId: enterprise.id,
     })
-
-    return sector.id
   }
 
   public async handle(data: RegisterData): Promise<AccessToken> {
@@ -45,9 +40,9 @@ export default class RegisterService {
     try {
       const enterprise = await this.createEnterprise(data)
 
-      const sectorId = await this.createSector(enterprise)
+      await this.createSectorEnterprise(enterprise)
 
-      const user = await this.createUser(enterprise, data, sectorId)
+      const user = await this.createUser(enterprise, data)
 
       await db.commitGlobalTransaction()
 

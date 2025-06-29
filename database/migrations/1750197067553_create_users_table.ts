@@ -5,30 +5,20 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id').notNullable()
+      table.uuid('id').primary()
       table
-        .integer('enterprise_id')
-        .unsigned()
+        .uuid('enterprise_id')
         .notNullable()
         .references('id')
         .inTable('enterprises')
         .onDelete('CASCADE')
 
-      table
-        .integer('sector_id')
-        .unsigned()
-        .nullable()
-        .references('id')
-        .inTable('enterprises')
-        .onDelete('CASCADE')
+      table.uuid('sector_id').nullable().references('id').inTable('sectors').onDelete('CASCADE')
 
       table.string('full_name').nullable()
       table.string('email', 254).notNullable().unique()
       table.string('password').notNullable()
       table.boolean('is_admin').notNullable()
-
-      table.timestamp('created_at').notNullable()
-      table.timestamp('updated_at').nullable()
     })
   }
 

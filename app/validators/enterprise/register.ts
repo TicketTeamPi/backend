@@ -15,8 +15,6 @@ export const registerValidator = vine.compile(
         return !exists
       }),
 
-    phone: vine.string().minLength(10),
-
     email: vine
       .string()
       .email()

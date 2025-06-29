@@ -3,7 +3,6 @@ import User from '#models/user'
 import { createValidator } from '#validators/user/create'
 import { inject } from '@adonisjs/core'
 import CreateService from '#services/user/create_service'
-import Sector from '#models/sector'
 
 @inject()
 export default class UsersController {
@@ -46,15 +45,14 @@ export default class UsersController {
 
     const enterpriseId = auth.user?.enterpriseId!
 
-    data.isAdmin = false
-
     await this.createService.handle(data, enterpriseId)
 
     return response.noContent()
   }
 
-  async destroy({ auth, params, response }: HttpContext) {
+  async changeStatus({ auth, params, response }: HttpContext) {
     const enterpriseId = auth.user!.enterpriseId!
+    console.log(params.id)
     const user = await User.query()
       .where('id', params.id)
       .where('enterpriseId', enterpriseId)
@@ -64,7 +62,8 @@ export default class UsersController {
       return response.forbidden({ message: 'You cannot delete your own account.' })
     }
 
-    await user.delete()
+    user.isActive = !user.isActive
+    await user.save()
 
     return response.noContent()
   }
@@ -80,22 +79,6 @@ export default class UsersController {
 
     user.password = newPassword
     await user.save()
-
-    return response.noContent()
-  }
-
-  async linkToSector({ auth, params, request, response }: HttpContext) {
-    const enterpriseId = auth.user!.enterpriseId!
-    const user = await User.query()
-      .where('id', params.id)
-      .where('enterpriseId', enterpriseId)
-      .firstOrFail()
-    const sector = await Sector.query()
-      .where('id', request.input('sectorId'))
-      .where('enterpriseId', enterpriseId)
-      .firstOrFail()
-
-    await user.related('sector').associate(sector)
 
     return response.noContent()
   }
