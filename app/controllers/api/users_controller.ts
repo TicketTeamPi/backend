@@ -12,7 +12,10 @@ export default class UsersController {
   async getAllUsersByEnterpriseId({ auth, response }: HttpContext) {
     const enterpriseId = auth.user!.enterpriseId!
 
-    const users = await User.query().where('enterpriseId', enterpriseId).preload('sector')
+    const users = await User.query()
+      .where('enterpriseId', enterpriseId)
+      .where('isActive', true)
+      .preload('sector')
 
     return response.ok({
       data: users.map((user: User) => ({
@@ -75,7 +78,6 @@ export default class UsersController {
 
   async changeStatus({ auth, params, response }: HttpContext) {
     const enterpriseId = auth.user!.enterpriseId!
-    console.log(params.id)
     const user = await User.query()
       .where('id', params.id)
       .where('enterpriseId', enterpriseId)

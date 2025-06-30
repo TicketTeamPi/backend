@@ -37,15 +37,19 @@ export default class SectorsController {
 
     const sectorsEnterprise = await SectorEnterprise.query()
       .where('enterpriseId', enterpriseId)
-      .preload('sector')
+      .preload('sector', (query) => {
+        query.where('isActive', true)
+      })
 
     return response.ok({
-      data: sectorsEnterprise.map((sectorEnterprise) => ({
-        id: sectorEnterprise.sector.id,
-        name: sectorEnterprise.sector.name,
-        description: sectorEnterprise.sector.description,
-        color: sectorEnterprise.sector.color,
-      })),
+      data: sectorsEnterprise
+        .filter((sectorEnterprise) => sectorEnterprise.sector) // só setores ativos
+        .map((sectorEnterprise) => ({
+          id: sectorEnterprise.sector.id,
+          name: sectorEnterprise.sector.name,
+          description: sectorEnterprise.sector.description,
+          color: sectorEnterprise.sector.color,
+        })),
     })
   }
 
@@ -71,12 +75,8 @@ export default class SectorsController {
     })
   }
 
-  async changeStatus({ auth, params, response }: HttpContext) {
-    const enterpriseId = auth.user!.enterpriseId!
-    const sector = await Sector.query()
-      .where('id', params.id)
-      .where('enterpriseId', enterpriseId)
-      .firstOrFail()
+  async changeStatus({ params, response }: HttpContext) {
+    const sector = await Sector.query().where('id', params.id).firstOrFail()
 
     sector.isActive = !sector.isActive
     await sector.save()

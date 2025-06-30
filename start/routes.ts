@@ -9,6 +9,7 @@ const ColumnsController = () => import('#controllers/api/columns_controller')
 
 router.post('/register', [AuthController, 'register'])
 router.post('/login', [AuthController, 'login'])
+router.post('/check-session', [AuthController, 'checkSession'])
 
 router
   .group(() => {

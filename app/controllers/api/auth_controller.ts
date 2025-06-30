@@ -42,6 +42,15 @@ export default class AuthController {
     return response.noContent()
   }
 
+  async checkSession({ auth, response }: HttpContext) {
+    try {
+      await auth.authenticate()
+      return response.ok({ authenticated: true })
+    } catch {
+      return response.unauthorized({ authenticated: false })
+    }
+  }
+
   async me({ auth, response }: HttpContext) {
     return response.ok({
       name: auth.user?.name,
