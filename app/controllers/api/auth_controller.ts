@@ -26,6 +26,7 @@ export default class AuthController {
       data: {
         email: user.email,
         name: user.name,
+        sector_id: user.sector_id,
         accesstoken: token,
       },
     })
