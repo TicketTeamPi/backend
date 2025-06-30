@@ -26,7 +26,7 @@ router
     router.patch('/tickets/update-ticket/:id', [TicketsController, 'updateTicket'])
     router.patch('/tickets/change-status/:id', [TicketsController, 'changeStatus'])
 
-    router.get('/tickets/:id/responsible', [ResponsibleController, 'index'])
+    router.get('/tickets/:id/getResponsible', [ResponsibleController, 'index'])
     router.put('/tickets/:id/responsible', [ResponsibleController, 'setResponsible'])
 
     router.post('/columns', [ColumnsController, 'create'])
@@ -42,6 +42,7 @@ router
 
         router.post('/users', [UsersController, 'create'])
         router.patch('/users/change-status/:id', [UsersController, 'changeStatus'])
+        router.put('/users/updateUser', [UsersController, 'update'])
       })
       .use(middleware.adminOnly())
     router

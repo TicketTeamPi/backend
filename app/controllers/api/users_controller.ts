@@ -3,6 +3,7 @@ import User from '#models/user'
 import { createValidator } from '#validators/user/create'
 import { inject } from '@adonisjs/core'
 import CreateService from '#services/user/create_service'
+import { updateUserValidator } from '#validators/user/update'
 
 @inject()
 export default class UsersController {
@@ -51,6 +52,23 @@ export default class UsersController {
     const enterpriseId = auth.user?.enterpriseId!
 
     await this.createService.handle(data, enterpriseId)
+
+    return response.noContent()
+  }
+
+  async update({ auth, request, response }: HttpContext) {
+    const data = await request.validateUsing(updateUserValidator)
+    const user = await User.query()
+      .where('id', data.userId)
+      .where('enterpriseId', auth!.user!.enterpriseId)
+      .firstOrFail()
+
+    user.merge({
+      name: data.name!,
+      sector_id: data.sectorId,
+    })
+
+    user.save()
 
     return response.noContent()
   }

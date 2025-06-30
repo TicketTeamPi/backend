@@ -24,10 +24,12 @@ export default class AuthController {
 
     return response.ok({
       data: {
+        id: user.id,
         email: user.email,
         name: user.name,
         sector_id: user.sector_id,
         accesstoken: token,
+        isAdmin: user.isAdmin,
       },
     })
   }

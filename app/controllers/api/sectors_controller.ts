@@ -37,42 +37,21 @@ export default class SectorsController {
 
     const sectorsEnterprise = await SectorEnterprise.query()
       .where('enterpriseId', enterpriseId)
-      .preload('sector', (query) => {
-        query.preload('columns', (queryCol) => {
-          queryCol.preload('tickets', (queryTick) => {
-            queryTick.where('isActive', true)
-          })
-        })
-      })
+      .preload('sector')
 
     return response.ok({
       data: sectorsEnterprise.map((sectorEnterprise) => ({
         id: sectorEnterprise.sector.id,
         name: sectorEnterprise.sector.name,
         description: sectorEnterprise.sector.description,
-        columns: sectorEnterprise.sector.columns.map((column) => ({
-          id: column.id,
-          name: column.name,
-          tickets: column.tickets.map((ticket) => ({
-            id: ticket.id,
-            title: ticket.title,
-            priority: ticket.priority,
-            userId: ticket.createdBy,
-            createdAt: ticket.createdAt,
-            responsibleId: ticket?.responsibleId,
-          })),
-        })),
+        color: sectorEnterprise.sector.color,
       })),
     })
   }
 
   async update({ auth, params, request, response }: HttpContext) {
     const data = await request.validateUsing(sectorValidator)
-    const enterpriseId = auth.user!.enterpriseId!
-    const sector = await Sector.query()
-      .where('id', params.id)
-      .where('enterpriseId', enterpriseId)
-      .firstOrFail()
+    const sector = await Sector.query().where('id', params.id).firstOrFail()
 
     await sector
       .merge({

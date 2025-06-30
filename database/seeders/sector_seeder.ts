@@ -8,6 +8,7 @@ export default class extends BaseSeeder {
       id: env.get('IDSECTORDEFAULT'),
       name: 'Adm',
       description: 'Admin',
+      color: '#1D1D17',
     })
   }
 }

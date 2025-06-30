@@ -26,11 +26,6 @@ export default class Sector extends BaseModel {
   })
   declare users: HasMany<typeof User>
 
-  @hasMany(() => Column, {
-    foreignKey: 'sectorId',
-  })
-  declare columns: HasMany<typeof Column>
-
   @hasMany(() => Ticket, {
     foreignKey: 'sectorId',
   })
