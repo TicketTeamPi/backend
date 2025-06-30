@@ -58,6 +58,7 @@ export default class SectorsController {
             title: ticket.title,
             priority: ticket.priority,
             userId: ticket.createdBy,
+            createdAt: ticket.createdAt,
             responsibleId: ticket?.responsibleId,
           })),
         })),

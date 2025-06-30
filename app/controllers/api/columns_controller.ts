@@ -81,6 +81,7 @@ export default class ColumnsController {
           userId: ticket.createdBy,
           position: ticket.position,
           responsibleId: ticket?.responsibleId,
+          createdAt: ticket.createdAt,
           sector: {
             name: ticket.sector.name,
             color: ticket.sector.color,
@@ -92,7 +93,6 @@ export default class ColumnsController {
 
   async moveColumn({ auth, request, response }: HttpContext) {
     const data = await request.validateUsing(columnChangeValidator)
-    const column = await Column.findByOrFail('id', data.columnId)
     const columns = await Column.query().where('enterpriseId', auth.user!.enterpriseId)
     if (columns.length >= data.position) {
       const columnIndex = columns.findIndex((t) => t.id === data.columnId)

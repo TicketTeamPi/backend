@@ -17,7 +17,7 @@ router
 
     router.get('/sectors', [SectorsController, 'getAll'])
 
-    router.get('/users', [UsersController, 'index'])
+    router.get('/users', [UsersController, 'getAllUsersByEnterpriseId'])
     router.get('/users/:id', [UsersController, 'show'])
     router.put('/users/:id/password', [UsersController, 'updatePassword'])
 
