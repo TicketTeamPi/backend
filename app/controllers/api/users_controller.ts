@@ -8,10 +8,10 @@ import CreateService from '#services/user/create_service'
 export default class UsersController {
   constructor(private createService: CreateService) {}
 
-  async index({ auth, response }: HttpContext) {
+  async getAllUsersByEnterpriseId({ auth, response }: HttpContext) {
     const enterpriseId = auth.user!.enterpriseId!
 
-    const users = await User.query().where('enterpriseId', enterpriseId)
+    const users = await User.query().where('enterpriseId', enterpriseId).preload('sector')
 
     return response.ok({
       data: users.map((user: User) => ({
@@ -19,6 +19,11 @@ export default class UsersController {
         name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
+        sector: {
+          id: user.sector.id,
+          name: user.sector.name,
+          color: user.sector.color,
+        },
       })),
     })
   }
