@@ -53,9 +53,11 @@ export default class AuthController {
 
   async me({ auth, response }: HttpContext) {
     return response.ok({
+      id: auth.user?.id,
       name: auth.user?.name,
       email: auth.user?.email,
       isAdmin: auth.user?.isAdmin,
+      sectorId: auth.user?.sector_id,
     })
   }
 }
