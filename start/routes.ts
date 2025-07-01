@@ -29,6 +29,7 @@ router
 
     router.get('/tickets/:id/getResponsible', [ResponsibleController, 'index'])
     router.put('/tickets/:id/responsible', [ResponsibleController, 'setResponsible'])
+    router.patch('/ticket/getOutTicket/:id', [ResponsibleController, 'getOutResponsible'])
 
     router.post('/columns', [ColumnsController, 'create'])
     router.get('/columns', [ColumnsController, 'findAll'])

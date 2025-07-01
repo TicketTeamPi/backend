@@ -1,4 +1,5 @@
 import Ticket from '#models/ticket'
+import env from '#start/env'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ResponsibleController {
@@ -9,17 +10,18 @@ export default class ResponsibleController {
       .preload('sector')
 
     return response.ok({
-      data: tickets.map((column) => ({
-        id: column.column.id,
-        name: column.column.name,
+      data: tickets.map((ticket) => ({
+        id: ticket.column.id,
+        name: ticket.column.name,
         tickets: {
-          id: column.id,
-          title: column.title,
-          priority: column.priority,
-          userId: column.createdBy,
+          id: ticket.id,
+          title: ticket.title,
+          priority: ticket.priority,
+          userId: ticket.createdBy,
           sector: {
-            name: column.sector.name,
-            color: column.sector.color,
+            id: ticket.sector.id,
+            name: ticket.sector.name,
+            color: ticket.sector.color,
           },
         },
       })),
@@ -33,11 +35,29 @@ export default class ResponsibleController {
       .firstOrFail()
 
     const responsibleId = request.input('responsibleId') ?? auth.user!.id
+    if (
+      ticket.sectorId === auth.user?.sector_id ||
+      auth.user?.isAdmin ||
+      auth.user?.sector_id === env.get('IDSECTORDEFAULT')
+    ) {
+      console.log('xdxdxdxdxd')
+      ticket.responsibleId = responsibleId
+      await ticket.save()
+      return response.noContent()
+    }
 
-    ticket.responsibleId = responsibleId
+    return response.badRequest()
+  }
 
-    await ticket.save()
+  async getOutResponsible({ auth, params, response }: HttpContext) {
+    const ticket = await Ticket.query()
+      .where('id', params.id)
+      .where('responsibleId', auth.user?.id!)
+      .where('enterpriseId', auth.user?.enterpriseId!)
+      .firstOrFail()
 
+    ticket.responsibleId = null
+    ticket.save()
     return response.noContent()
   }
 }

@@ -57,7 +57,7 @@ export default class AuthController {
       name: auth.user?.name,
       email: auth.user?.email,
       isAdmin: auth.user?.isAdmin,
-      sectorId: auth.user?.sector_id,
+      sector_id: auth.user?.sector_id,
     })
   }
 }

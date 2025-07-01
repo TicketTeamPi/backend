@@ -1,7 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { columnValidator } from '#validators/columns/column'
 import Column from '#models/column'
-import Ticket from '#models/ticket'
 import { columnChangeValidator } from '#validators/columns/change_column'
 import { positioning } from '#validators/columns/positioning'
 
@@ -29,34 +28,44 @@ export default class ColumnsController {
 
   async repositioningTicket({ request, response }: HttpContext) {
     const data = await request.validateUsing(positioning)
-    const column = await Column.query()
+
+    const columnFrom = await Column.query()
       .where('id', data.columnIdFrom)
       .preload('tickets')
       .firstOrFail()
-    if (!data.columnIdTo && column.tickets.length >= data.position) {
-      const ticketIndex = column.tickets.findIndex((t) => t.id === data.ticketId)
-      if (ticketIndex >= 0) {
-        moveArrayItem(column.tickets, ticketIndex, data.position)
+
+    const ticketIndex = columnFrom.tickets.findIndex((t) => t.id === data.ticketId)
+    if (ticketIndex === -1) {
+      return response.notFound({ message: 'Ticket não encontrado na coluna de origem.' })
+    }
+    const ticket = columnFrom.tickets[ticketIndex]
+
+    if (!data.columnIdTo || data.columnIdTo === data.columnIdFrom) {
+      const pos = Math.max(0, Math.min(data.position, columnFrom.tickets.length - 1))
+      moveArrayItem(columnFrom.tickets, ticketIndex, pos)
+      for (let i = 0; i < columnFrom.tickets.length; i++) {
+        columnFrom.tickets[i].position = i
+        await columnFrom.tickets[i].save()
       }
-      for (let i = 0; i < column.tickets.length; i++) {
-        column.tickets[i].position = i
-        await column.tickets[i].save()
-      }
-    } else {
-      const columnTo = await Column.query()
-        .where('id', data.columnIdTo!)
-        .preload('tickets')
-        .firstOrFail()
-      if (columnTo.tickets.length >= data.position) {
-        const ticket = await Ticket.findByOrFail('id', data.ticketId)
-        ticket.columnId = data.columnIdTo!
-        await ticket.save()
-        moveArrayItem(columnTo.tickets, columnTo.tickets.length - 1, data.position)
-        for (let i = 0; i < column.tickets.length; i++) {
-          column.tickets[i].position = i
-          await column.tickets[i].save()
-        }
-      }
+      return response.noContent()
+    }
+
+    const columnTo = await Column.query()
+      .where('id', data.columnIdTo)
+      .preload('tickets')
+      .firstOrFail()
+
+    columnFrom.tickets.splice(ticketIndex, 1)
+
+    ticket.columnId = data.columnIdTo
+    await ticket.save()
+
+    const insertPos = Math.max(0, Math.min(data.position, columnTo.tickets.length))
+    columnTo.tickets.splice(insertPos, 0, ticket)
+
+    for (let i = 0; i < columnTo.tickets.length; i++) {
+      columnTo.tickets[i].position = i
+      await columnTo.tickets[i].save()
     }
 
     return response.noContent()
@@ -66,7 +75,7 @@ export default class ColumnsController {
     const columns = await Column.query()
       .where('enterpriseId', auth!.user!.enterpriseId)
       .preload('tickets', (query) => {
-        query.preload('sector')
+        query.where('isActive', true).preload('sector')
       })
 
     return response.ok({
@@ -83,6 +92,7 @@ export default class ColumnsController {
           responsibleId: ticket?.responsibleId,
           createdAt: ticket.createdAt,
           sector: {
+            id: ticket.sector.id,
             name: ticket.sector.name,
             color: ticket.sector.color,
           },

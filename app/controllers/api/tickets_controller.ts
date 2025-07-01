@@ -22,9 +22,30 @@ export default class TicketsController {
   }
 
   async getByIdAndIsActive({ params, response }: HttpContext) {
-    const ticket = await Ticket.query().where('id', params.id).where('isActive', true).firstOrFail()
+    const ticket = await Ticket.query()
+      .where('id', params.id)
+      .where('isActive', true)
+      .preload('user')
+      .preload('responsible')
+      .preload('sector')
+      .firstOrFail()
 
-    return response.ok(ticket)
+    return response.ok({
+      id: ticket.id,
+      title: ticket.title,
+      description: ticket.description,
+      createdBy: ticket.createdBy,
+      userCreator: ticket.user.name,
+      position: ticket.position,
+      priority: ticket.priority,
+      responsibleId: ticket.responsibleId!,
+      responsibleName: ticket.responsible ? ticket.responsible.name : null,
+      sector: {
+        id: ticket.sector.id,
+        name: ticket.sector.name,
+        color: ticket.sector.color,
+      },
+    })
   }
 
   async updateTicket({ auth, params, request, response }: HttpContext) {

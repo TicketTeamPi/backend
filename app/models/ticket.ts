@@ -26,7 +26,7 @@ export default class Ticket extends BaseModel {
   declare createdBy: string
 
   @column()
-  declare responsibleId: string
+  declare responsibleId: string | null
 
   @column()
   declare sectorId: string
@@ -50,12 +50,12 @@ export default class Ticket extends BaseModel {
   declare createdAt: DateTime
 
   @belongsTo(() => User, {
-    foreignKey: 'created_by',
+    foreignKey: 'createdBy',
   })
   declare user: BelongsTo<typeof User>
 
   @belongsTo(() => User, {
-    foreignKey: 'responsible_id',
+    foreignKey: 'responsibleId',
   })
   declare responsible: BelongsTo<typeof User>
 
