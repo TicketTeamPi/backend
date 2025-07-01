@@ -40,7 +40,6 @@ export default class ResponsibleController {
       auth.user?.isAdmin ||
       auth.user?.sector_id === env.get('IDSECTORDEFAULT')
     ) {
-      console.log('xdxdxdxdxd')
       ticket.responsibleId = responsibleId
       await ticket.save()
       return response.noContent()
