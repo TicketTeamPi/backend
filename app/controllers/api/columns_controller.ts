@@ -74,6 +74,7 @@ export default class ColumnsController {
   async findAll({ auth, response }: HttpContext) {
     const columns = await Column.query()
       .where('enterpriseId', auth!.user!.enterpriseId)
+      .orderBy('position')
       .preload('tickets', (query) => {
         query.where('isActive', true).preload('sector')
       })
@@ -114,6 +115,15 @@ export default class ColumnsController {
         i++
       }
     }
+
+    return response.noContent()
+  }
+
+  async changeStatus({ auth, params, response }: HttpContext) {
+    await Column.query()
+      .where('id', params.id)
+      .where('enterpriseId', auth.user?.enterpriseId!)
+      .delete()
 
     return response.noContent()
   }

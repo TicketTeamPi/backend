@@ -35,6 +35,7 @@ router
     router.get('/columns', [ColumnsController, 'findAll'])
     router.put('/columns/reorganize', [ColumnsController, 'repositioningTicket'])
     router.put('/columns/reorganizeColumn', [ColumnsController, 'moveColumn'])
+    router.delete('/columns/change-status/:id', [ColumnsController, 'changeStatus'])
 
     router
       .group(() => {
