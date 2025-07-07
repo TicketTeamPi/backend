@@ -1,0 +1,67 @@
+version: '3.5'
+
+services:
+  mysql: #crio serviço mysql;
+    container_name: mysql_container #defino nome do container como 'container_name';
+    image: mysql #defino a imagem do serviço;
+    environment: #configurações do ambiente;
+      MYSQL_DATABASE: ${DATABASE} #utilizo as variáveis no .env;
+      MYSQL_ROOT_PASSWORD: ${ROOT_PASSWORD} #utilizo as variáveis no .env;
+      MYSQL_USER: ${USER} #utilizo as variáveis no .env;
+      MYSQL_PASSWORD: ${PASSWORD} #utilizo as variáveis no .env;
+    volumes:
+      - mysql:/var/lib/mysql #bind: para meu docker sql;
+    ports:
+      - "3306:3306" #mapeio a porta 3306;
+    networks:
+      - mysql #atribuo mysql como network;
+    restart: always #sempre irá reiniciar;
+
+  phpmyadmin: #crio serviço phpmyadmin;
+    container_name: phpmyadmin_container #defino nome do container como 'phpmyadmin_container';
+    image: phpmyadmin/phpmyadmin #defino a imagem do serviço;
+    environment: #configuro o ambiente;
+      PMA_ARBITRARY: 1 #crio variavél do ambiente PMA_ARBITRARY e defino como 1;
+      PMA_HOST: mysql #crio variavél do ambiente PMA_HOST e defino como mysql;
+      PMA_PORT: 3306 #crio variavél do ambiente PMA_PORT e defino como 3306;
+    volumes:
+      - ./php-make/upload.ini:/usr/local/etc/php/php.ini #defino o caminho para a criação do volume;
+    depends_on:
+      - mysql # este serviço 'phpmyadmin' depende do serviço 'mysql';
+    ports:
+      - "${PHPMYADMIN_PORT:-6060}:80" #mapeio a prota para -6060;
+    networks:
+      - mysql #atribuio mysql na network do serviço;
+    restart: always #ele sempre irá reiniciar;
+
+  app: #crio um serviço chamado app;
+    container_name: app_container  #defino o nome de container como 'app_container';
+    build:
+      context: ./app #o contexto de build será ./app;
+    volumes:
+      - ./app:/usr/src/app #os volumes serão criados a partir de um bind local com o remoto;
+      - /usr/src/app/node_modules #crio um volume remoto para as dependencias;
+    environment: #defino as variáveis de ambiente remoto;
+      HOST: 0.0.0.0 #crio variavél do ambiente HOST e defino como 0.0.0.0;
+      PORT: 3333 #crio variavél do ambiente PORT e defino como 3333;
+      NODE_ENV: development #crio variavél do ambiente NODE_ENV e defino como development;
+      DB_CONNECTION: mysql #crio variavél do ambiente DB_CONNECTION e defino como mysql;
+      MYSQL_HOST: mysql #crio variavél do ambiente MYSQL_HOST e defino como mysql;
+      MYSQL_PORT: 3306 #crio variavél do ambiente MYSQL_PORT e defino como 3306;
+      MYSQL_USER: ${USER} #crio variavél do ambiente remoto MYSQL_USER e defino como ${USER} do ambiente local;
+      MYSQL_PASSWORD: ${PASSWORD} #crio variavél do ambiente remoto MYSQL_PASSWORD e defino como ${PASSWORD} do ambiente local;
+      MYSQL_DB_NAME: ${DATABASE} #crio variavél do ambiente MYSQL_DB_NAME e defino como ${DATABASE} do ambiente local;
+    depends_on: 
+      - mysql # este serviço 'app' depende do serviço 'mysql';
+    networks:
+      - mysql # atribuo o serviço 'mysql' na rede no serviço 'app'
+    ports:
+      - "3333:3333" # mapeio a porta 3333;
+    restart: always #ele sempre irá reiniciar;
+
+networks:
+  mysql:
+    driver: bridge
+
+volumes:
+  mysql:
